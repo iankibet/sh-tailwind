@@ -42,9 +42,20 @@ export const defaultTheme = {
             empty: 'px-3 py-2 text-sm text-gray-400'
         },
         phone: {
-            wrapper: 'flex items-stretch overflow-hidden rounded-md border border-gray-300 shadow-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/30 dark:border-gray-600',
-            dial: 'border-r border-gray-300 bg-gray-50 px-2 py-2 text-sm text-gray-700 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200',
-            input: 'block w-full border-0 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-0 dark:bg-gray-800 dark:text-gray-100'
+            wrapper: 'relative flex items-stretch rounded-md border border-gray-300 bg-white shadow-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/30 dark:border-gray-600 dark:bg-gray-800',
+            trigger: 'flex shrink-0 cursor-pointer items-center gap-1.5 rounded-l-md border-r border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600',
+            flag: 'text-base leading-none',
+            dial: 'text-sm font-medium text-gray-600 dark:text-gray-300',
+            chevron: 'size-3.5 text-gray-400',
+            input: 'block w-full rounded-r-md border-0 bg-transparent px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-0 dark:text-gray-100',
+            dropdown: 'absolute left-0 top-full z-20 mt-1 w-72 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800',
+            search: 'block w-full border-0 border-b border-gray-100 bg-transparent px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-100',
+            list: 'max-h-60 overflow-y-auto py-1',
+            option: 'flex w-full cursor-pointer items-center gap-2.5 px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700',
+            optionActive: 'flex w-full cursor-pointer items-center gap-2.5 bg-blue-50 px-3 py-2 text-left text-sm text-blue-700 dark:bg-gray-700 dark:text-blue-300',
+            optionName: 'flex-1 truncate',
+            optionDial: 'text-xs text-gray-400',
+            empty: 'px-3 py-3 text-center text-sm text-gray-400'
         }
     },
     dialog: {
@@ -85,6 +96,48 @@ export const defaultTheme = {
             xl: 'max-h-[60vh]',
             full: 'max-h-full'
         }
+    },
+    table: {
+        wrapper: 'space-y-3',
+        toolbar: 'flex flex-col gap-3 md:flex-row md:items-center md:justify-between',
+        search: 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 md:max-w-xs dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100',
+        exactLabel: 'inline-flex items-center gap-1.5 text-xs text-gray-500',
+        rangeWrapper: 'flex items-center gap-2',
+        rangeInput: 'rounded-md border border-gray-300 px-2 py-1.5 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200',
+        offline: 'flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300',
+        container: 'hidden overflow-x-auto rounded-lg border border-gray-200 md:block dark:border-gray-700',
+        table: 'w-full min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700',
+        thead: 'bg-gray-50 dark:bg-gray-800',
+        th: 'px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400',
+        sortBtn: 'inline-flex cursor-pointer items-center gap-1 uppercase hover:text-gray-800 dark:hover:text-gray-200',
+        tbody: 'divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-900',
+        tr: '',
+        trClickable: 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800',
+        td: 'px-4 py-2.5 text-gray-700 dark:text-gray-200',
+        money: 'font-semibold text-emerald-600',
+        empty: 'px-4 py-10 text-center text-sm text-gray-400',
+        error: 'rounded-md bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950 dark:text-red-300',
+        loading: 'flex justify-center px-4 py-10 text-gray-400',
+        actionsCell: 'whitespace-nowrap px-4 py-2.5 text-right',
+        actionBtn: 'ml-3 inline-flex cursor-pointer items-center gap-1 text-sm text-blue-600 hover:underline first:ml-0',
+        checkbox: 'size-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500',
+        cards: 'space-y-3 md:hidden',
+        card: 'rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900',
+        cardLabel: 'text-xs font-semibold uppercase tracking-wide text-gray-400',
+        cardValue: 'mb-2 text-sm text-gray-700 dark:text-gray-200',
+        pagination: {
+            wrapper: 'flex flex-col items-center justify-between gap-3 md:flex-row',
+            info: 'text-xs text-gray-500',
+            perPage: 'rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-600 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300',
+            pages: 'flex items-center gap-1',
+            pageBtn: 'inline-flex size-8 cursor-pointer items-center justify-center rounded-md border border-gray-300 text-xs text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800',
+            pageBtnActive: 'inline-flex size-8 items-center justify-center rounded-md border border-blue-600 bg-blue-600 text-xs font-semibold text-white',
+            ellipsis: 'px-1 text-xs text-gray-400',
+            loadMore: 'inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200'
+        },
+        multiBar: 'fixed bottom-5 left-1/2 z-40 flex min-w-80 -translate-x-1/2 items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900',
+        multiCount: 'inline-flex items-center justify-center rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white',
+        multiBtn: 'inline-flex items-center justify-center gap-1 rounded-md border border-blue-200 px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 dark:border-blue-800 dark:text-blue-300'
     },
     buttons: {
         primary: 'inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/40 disabled:opacity-60',

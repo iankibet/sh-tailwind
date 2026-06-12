@@ -39,6 +39,7 @@ const emit = defineEmits([
 ])
 
 const t = useTheme('form', computed(() => props.classes))
+const inputsTheme = useTheme('inputs')
 const injectedComponents = inject(SH_TW_COMPONENTS, {})
 const dialogContext = inject(SH_DIALOG_CONTEXT, null)
 
@@ -94,6 +95,13 @@ const isLastStep = computed(() => currentStep.value >= formSteps.value.length - 
 
 const resolveComponent = (field) =>
     field.component ?? injectedComponents[field.type] ?? builtins[field.type] ?? builtins.text
+
+const inputClass = (field) => {
+    if (errors[field.name]) {
+        return t.value.inputInvalid
+    }
+    return field.type === 'select' ? inputsTheme.value.select : t.value.input
+}
 
 const inputProps = (field) => ({
     placeholder: field.placeholder || undefined,
@@ -229,7 +237,7 @@ const submitForm = async () => {
                             v-model="field.value"
                             v-bind="inputProps(field)"
                             :is-invalid="!!errors[field.name]"
-                            :class="[field.type === 'select' ? undefined : (errors[field.name] ? t.inputInvalid : t.input), field.class]"
+                            :class="[inputClass(field), field.class]"
                             @update:model-value="value => fieldChanged(field, value)"
                             @clear-validation-errors="delete errors[field.name]"
                         />
