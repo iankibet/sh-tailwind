@@ -97,7 +97,7 @@ const statusClass = (status) => ({
 
         <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
             <h2 class="text-lg font-semibold">Basic form (string fields, type inference)</h2>
-            <ShForm action="demo/save" :fields="basicFields" success-message="Saved!" />
+            <ShForm action="demo/save:addUser" :fields="basicFields" success-message="Saved!" />
         </section>
 
         <section class="space-y-6 rounded-xl border border-gray-200 bg-white p-6">
