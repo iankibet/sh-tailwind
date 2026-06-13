@@ -1,6 +1,6 @@
 {
   "name": "@iankibetsh/sh-tailwind",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Vue 3 + Tailwind CSS v4 component library for Laravel backends, built on @iankibetsh/sh-core. Forms, dialogs, drawers and action components.",
   "type": "module",
   "main": "./dist/sh-tailwind.cjs.js",
