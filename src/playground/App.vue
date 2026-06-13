@@ -9,8 +9,20 @@ import ShDialogForm from '../components/overlay/ShDialogForm.vue'
 import ShConfirmAction from '../components/actions/ShConfirmAction.vue'
 import ShSilentAction from '../components/actions/ShSilentAction.vue'
 import ShTable from '../components/table/ShTable.vue'
+import ShTabs from '../components/navigation/ShTabs.vue'
 import PinInput from '../components/form/inputs/PinInput.vue'
 import { demoUsers } from './demoData.js'
+
+// --- ShTabs -----------------------------------------------------------------
+const tabVariant = ref('underline')
+const activeTab = ref(null)
+const tabChange = ref('')
+const demoTabs = [
+    { key: 'overview', label: 'Overview' },
+    { key: 'activity', label: 'Activity', count: 12 },
+    { key: 'billing', label: 'Billing', count: 0 },
+    { key: 'archived', label: 'Archived', disabled: true }
+]
 
 const dialogOpen = ref(false)
 const staticDialog = ref(false)
@@ -141,6 +153,35 @@ const statusClass = (status) => ({
                     </span>
                 </template>
             </ShTable>
+        </section>
+
+        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+            <h2 class="text-lg font-semibold">ShTabs — slot content, counts, variants, keyboard nav</h2>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500">Variant:</span>
+                <select v-model="tabVariant" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+                    <option value="underline">underline</option>
+                    <option value="pills">pills</option>
+                    <option value="boxed">boxed</option>
+                </select>
+                <span class="text-xs text-gray-400">active: {{ activeTab }} · last change: {{ tabChange || '—' }}</span>
+            </div>
+            <ShTabs
+                v-model:tab="activeTab"
+                :tabs="demoTabs"
+                :variant="tabVariant"
+                @change="(key) => (tabChange = key)"
+            >
+                <template #tab-overview>
+                    <p class="text-sm text-gray-600">Overview panel — arrow keys move between tabs, Home/End jump to ends.</p>
+                </template>
+                <template #tab-activity>
+                    <p class="text-sm text-gray-600">Activity panel with a count bubble (12).</p>
+                </template>
+                <template #tab-billing>
+                    <p class="text-sm text-gray-600">Billing panel — a zero count still renders its bubble.</p>
+                </template>
+            </ShTabs>
         </section>
 
         <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">

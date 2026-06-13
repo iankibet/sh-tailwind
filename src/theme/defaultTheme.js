@@ -145,6 +145,26 @@ export const defaultTheme = {
         multiCount: 'inline-flex items-center justify-center rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white',
         multiBtn: 'inline-flex items-center justify-center gap-1 rounded-md border border-blue-200 px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50'
     },
+    tabs: {
+        nav: 'flex flex-wrap items-center gap-1 border-b border-gray-200',
+        tab: 'group relative -mb-px inline-flex items-center gap-2 border-b-2 border-transparent px-3 py-2 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 disabled:pointer-events-none disabled:opacity-40',
+        tabActive: 'group relative -mb-px inline-flex items-center gap-2 border-b-2 border-blue-600 px-3 py-2 text-sm font-medium text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40',
+        icon: 'size-4 shrink-0',
+        count: 'inline-flex min-w-5 items-center justify-center rounded-full bg-gray-100 px-1.5 py-0.5 text-xs font-semibold text-gray-600',
+        countActive: 'inline-flex min-w-5 items-center justify-center rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-700',
+        panel: 'pt-4 focus:outline-none',
+        empty: 'rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-700',
+        pills: {
+            nav: 'flex flex-wrap items-center gap-1.5',
+            tab: 'inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 disabled:pointer-events-none disabled:opacity-40',
+            tabActive: 'inline-flex items-center gap-2 rounded-full bg-blue-600 px-3.5 py-1.5 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40'
+        },
+        boxed: {
+            nav: 'flex flex-wrap items-center gap-1 border-b border-gray-200',
+            tab: 'inline-flex items-center gap-2 rounded-t-lg border border-transparent px-3.5 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 disabled:pointer-events-none disabled:opacity-40',
+            tabActive: 'inline-flex items-center gap-2 -mb-px rounded-t-lg border border-gray-200 border-b-white bg-white px-3.5 py-2 text-sm font-medium text-blue-600 focus:outline-none'
+        }
+    },
     buttons: {
         primary: 'inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/40 disabled:opacity-60',
         secondary: 'inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none',

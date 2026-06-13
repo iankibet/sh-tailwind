@@ -25,6 +25,9 @@ export { useTableData } from './table/useTableData.js'
 export { localQuery } from './table/localQuery.js'
 export { default as shTableCache, clearTableCache } from './table/tableCache.js'
 
+// Navigation
+export { default as ShTabs } from './components/navigation/ShTabs.vue'
+
 // Actions
 export { default as ShConfirmAction } from './components/actions/ShConfirmAction.vue'
 export { default as ShSilentAction } from './components/actions/ShSilentAction.vue'
