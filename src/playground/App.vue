@@ -8,6 +8,9 @@ import ShDrawerBtn from '../components/overlay/ShDrawerBtn.vue'
 import ShDialogForm from '../components/overlay/ShDialogForm.vue'
 import ShConfirmAction from '../components/actions/ShConfirmAction.vue'
 import ShSilentAction from '../components/actions/ShSilentAction.vue'
+import ShTable from '../components/table/ShTable.vue'
+import PinInput from '../components/form/inputs/PinInput.vue'
+import { demoUsers } from './demoData.js'
 
 const dialogOpen = ref(false)
 const staticDialog = ref(false)
@@ -15,7 +18,22 @@ const drawerOpen = ref(false)
 const drawerPosition = ref('end')
 const stacked = ref(false)
 
+const otp = ref('')
+const securePin = ref('')
+
 const basicFields = ['name', 'email', 'phone', 'password', 'description']
+
+const pinFields = [
+    { name: 'otp', type: 'pin', label: 'One-time code', digits: 6, helper: '6-digit code sent to your phone' },
+    { name: 'wallet_pin', type: 'pin', label: 'Wallet PIN', digits: 4, secret: true, helper: '4-digit secret PIN (masked)' }
+]
+
+const maskFields = [
+    { name: 'amount', mask: 'money', label: 'Amount', helper: 'Auto-grouped thousands, 2 decimals' },
+    { name: 'salary', mask: { type: 'money', prefix: 'KES ', decimals: 0 }, label: 'Salary (KES, no decimals)' },
+    { name: 'card', mask: '#### #### #### ####', label: 'Card number' },
+    { name: 'msisdn', mask: '(###) ###-####', label: 'Phone pattern' }
+]
 
 const richFields = [
     { name: 'title', required: true, helper: 'Shown on the public page' },
@@ -30,6 +48,47 @@ const steps = [
     { title: 'Security', fields: ['phone', 'password'] },
     { title: 'Profile', fields: ['description'] }
 ]
+
+// --- ShTable ----------------------------------------------------------------
+const tableRef = ref(null)
+const lastEvent = ref('')
+
+const userColumns = [
+    { name: 'name' },
+    { name: 'email', label: 'Email' },
+    { name: 'amount', format: 'money' },
+    { name: 'role' },
+    { name: 'status' },                  // rendered via #cell-status slot
+    { name: 'created_at', label: 'Joined', format: 'date' }
+]
+
+// Actions specify the callback DIRECTLY via `handler` (no @event wiring).
+// handler receives the row; close over component state / refs as needed.
+const userActions = [
+    { label: 'View', handler: (row) => { lastEvent.value = `Viewed ${row.name}` } },
+    { label: 'Promote', handler: (row) => { row.role = 'Manager'; lastEvent.value = `${row.name} → Manager` } },
+    {
+        label: 'Delete',
+        class: 'text-red-600',
+        handler: (row) => {
+            lastEvent.value = `Deleted ${row.name}`
+            const i = demoUsers.findIndex(u => u.id === row.id)
+            if (i > -1) demoUsers.splice(i, 1)
+            tableRef.value?.reload()       // refresh after mutating
+        }
+    }
+]
+
+// Bulk action — handler receives the array of selected rows.
+const userMultiActions = [
+    { label: 'Email selected', handler: (rows) => { lastEvent.value = `Emailing ${rows.length} user(s)` } }
+]
+
+const statusClass = (status) => ({
+    active: 'bg-emerald-100 text-emerald-700',
+    inactive: 'bg-gray-100 text-gray-600',
+    pending: 'bg-amber-100 text-amber-700'
+}[status] ?? 'bg-gray-100 text-gray-600')
 </script>
 
 <template>
@@ -39,6 +98,55 @@ const steps = [
         <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
             <h2 class="text-lg font-semibold">Basic form (string fields, type inference)</h2>
             <ShForm action="demo/save" :fields="basicFields" success-message="Saved!" />
+        </section>
+
+        <section class="space-y-6 rounded-xl border border-gray-200 bg-white p-6">
+            <h2 class="text-lg font-semibold">PIN input (configurable digits)</h2>
+            <div class="space-y-2">
+                <p class="text-sm font-medium text-gray-700">Standalone — 6-digit OTP</p>
+                <PinInput v-model="otp" :length="6" />
+                <p class="text-xs text-gray-500">value: {{ otp || '—' }}</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-sm font-medium text-gray-700">Standalone — 4-digit masked PIN</p>
+                <PinInput v-model="securePin" :length="4" mask />
+                <p class="text-xs text-gray-500">value: {{ securePin || '—' }}</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-sm font-medium text-gray-700">Inside a ShForm (type: 'pin', digits/mask)</p>
+                <ShForm action="demo/pin" :fields="pinFields" submit-label="Verify" />
+            </div>
+        </section>
+
+        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+            <h2 class="text-lg font-semibold">ShTable — actions via direct <code>handler</code> callbacks</h2>
+            <p class="text-sm text-gray-500">
+                Search, sort and paginate run against mock data. Row actions call a callback directly
+                (no <code>@event</code> wiring). Last action:
+                <span class="font-medium text-gray-800">{{ lastEvent || '—' }}</span>
+            </p>
+            <ShTable
+                ref="tableRef"
+                endpoint="demo/users"
+                :columns="userColumns"
+                :actions="userActions"
+                :multi-actions="userMultiActions"
+                :per-page="6"
+                cache
+                searchable
+            >
+                <template #cell-status="{ value }">
+                    <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize" :class="statusClass(value)">
+                        {{ value }}
+                    </span>
+                </template>
+            </ShTable>
+        </section>
+
+        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+            <h2 class="text-lg font-semibold">Input masks (money, patterns)</h2>
+            <p class="text-sm text-gray-500">Type freely — values auto-format. v-model receives the raw number for money, the formatted string for patterns.</p>
+            <ShForm action="demo/mask" :fields="maskFields" submit-label="Save" />
         </section>
 
         <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">

@@ -3,7 +3,7 @@ import { startCase } from './strings.js'
 // Exact-name inference carried over from shframework's ShAutoForm
 const NAME_TYPE_MAP = {
     password: 'password',
-    pin: 'password',
+    pin: 'pin',
     password_confirmation: 'password',
     message: 'textarea',
     description: 'textarea',

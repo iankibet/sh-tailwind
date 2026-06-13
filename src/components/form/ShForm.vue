@@ -10,6 +10,8 @@ import TextInput from './inputs/TextInput.vue'
 import TextAreaInput from './inputs/TextAreaInput.vue'
 import EmailInput from './inputs/EmailInput.vue'
 import PasswordInput from './inputs/PasswordInput.vue'
+import PinInput from './inputs/PinInput.vue'
+import MaskedInput from './inputs/MaskedInput.vue'
 import NumberInput from './inputs/NumberInput.vue'
 import DateInput from './inputs/DateInput.vue'
 import SelectInput from './inputs/SelectInput.vue'
@@ -48,6 +50,7 @@ const builtins = {
     textarea: TextAreaInput,
     email: EmailInput,
     password: PasswordInput,
+    pin: PinInput,
     number: NumberInput,
     date: DateInput,
     select: SelectInput,
@@ -93,8 +96,14 @@ const formSteps = computed(() => {
 
 const isLastStep = computed(() => currentStep.value >= formSteps.value.length - 1)
 
-const resolveComponent = (field) =>
-    field.component ?? injectedComponents[field.type] ?? builtins[field.type] ?? builtins.text
+const resolveComponent = (field) => {
+    // a `mask` (string/object/function) auto-formats via MaskedInput,
+    // except for pins (their `secret` flag is unrelated to formatting)
+    if (field.mask && field.type !== 'pin') {
+        return MaskedInput
+    }
+    return field.component ?? injectedComponents[field.type] ?? builtins[field.type] ?? builtins.text
+}
 
 const inputClass = (field) => {
     if (errors[field.name]) {
@@ -119,6 +128,8 @@ const inputProps = (field) => ({
     ...(field.type === 'textarea' ? { rows: field.rows } : {}),
     ...(field.type === 'date' ? { withTime: field.withTime, min: field.min, max: field.max } : {}),
     ...(field.type === 'phone' ? { countryCode: field.countryCode, detectCountry: field.detectCountry } : {}),
+    ...(field.type === 'pin' ? { length: field.length ?? field.digits, secret: field.secret } : {}),
+    ...(field.mask && field.type !== 'pin' ? { mask: field.mask } : {}),
     ...(field.props ?? {})
 })
 
