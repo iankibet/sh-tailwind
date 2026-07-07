@@ -7,6 +7,7 @@ import { getPath } from '../../table/localQuery.js'
 import { startCase } from '../../utils/strings.js'
 import ShTablePagination from './ShTablePagination.vue'
 import ShSpinner from '../actions/ShSpinner.vue'
+import ShRange from '../form/inputs/ShRange.vue'
 
 const props = defineProps({
     endpoint: { type: String, required: true },
@@ -31,6 +32,8 @@ const props = defineProps({
     searchPlaceholder: { type: String, default: 'Search' },
     // date range filter (sends from/to like the classic ShTable)
     hasRange: Boolean,
+    selectedRange: { type: [Object, String], default: null },
+    rangeStartYear: { type: Number, default: 2021 },
     perPage: Number,
     sortBy: String,
     sortMethod: { type: String, default: 'desc' },
@@ -103,6 +106,7 @@ const orderBy = ref(props.sortBy)
 const orderMethod = ref(props.sortMethod)
 const from = ref(null)
 const to = ref(null)
+const period = ref(null)
 const fromInput = ref('')
 const toInput = ref('')
 
@@ -125,6 +129,7 @@ const buildQuery = () => {
         paginated: true,
         from: from.value,
         to: to.value,
+        period: period.value,
         exact: exact.value || null
     }
     Object.keys(params).forEach(key => {
@@ -161,15 +166,10 @@ const onSearchInput = () => {
 }
 onBeforeUnmount(() => clearTimeout(searchTimer))
 
-// HTML date input (yyyy-mm-dd) -> backend format (MM/dd/yyyy)
-const toBackendDate = (value) => {
-    if (!value) return null
-    const [y, m, d] = value.split('-')
-    return `${m}/${d}/${y}`
-}
-const rangeChanged = () => {
-    from.value = toBackendDate(fromInput.value)
-    to.value = toBackendDate(toInput.value)
+const rangeChanged = (newRange) => {
+    from.value = newRange.fromFormatted
+    to.value = newRange.toFormatted
+    period.value = newRange.period
     page.value = 1
     reloadData()
 }
@@ -325,9 +325,12 @@ defineExpose({ reload: () => reloadData(), records })
                 </label>
             </div>
             <div v-if="hasRange" :class="t.rangeWrapper">
-                <input v-model="fromInput" type="date" :class="t.rangeInput" @change="rangeChanged">
-                <span class="text-xs text-gray-400">to</span>
-                <input v-model="toInput" type="date" :class="t.rangeInput" @change="rangeChanged">
+                <ShRange
+                    :selected="typeof selectedRange === 'string' ? selectedRange : undefined"
+                    :model-value="typeof selectedRange === 'object' ? selectedRange : null"
+                    :start-year="rangeStartYear"
+                    @range-selected="rangeChanged"
+                />
             </div>
         </div>
 

@@ -62,6 +62,21 @@ export const defaultTheme = {
             optionName: 'flex-1 truncate',
             optionDial: 'text-xs text-gray-400',
             empty: 'px-3 py-3 text-center text-sm text-gray-400'
+        },
+        range: {
+            wrapper: 'relative inline-block text-left w-full md:w-auto',
+            trigger: 'inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30 shadow-sm cursor-pointer w-full md:w-auto justify-between',
+            dropdown: 'absolute right-0 mt-2 z-20 w-80 rounded-2xl border border-slate-100 bg-white p-4 shadow-xl focus:outline-none',
+            presetsGrid: 'grid grid-cols-2 gap-1 mb-4',
+            presetBtn: 'text-left px-3 py-2 text-xs rounded-lg font-medium transition cursor-pointer',
+            presetBtnActive: 'bg-slate-900 text-white',
+            presetBtnInactive: 'text-slate-600 hover:bg-slate-50',
+            customWrapper: 'border-t border-slate-100 pt-3',
+            customTitle: 'text-xs font-semibold text-slate-400 mb-2',
+            customInputs: 'grid grid-cols-2 gap-2',
+            customInputLabel: 'block text-[10px] font-bold text-slate-400 uppercase',
+            customInput: 'mt-1 block w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10',
+            applyBtn: 'mt-3 w-full rounded-lg bg-slate-900 py-2 text-xs font-semibold text-white hover:bg-slate-800 transition cursor-pointer'
         }
     },
     dialog: {

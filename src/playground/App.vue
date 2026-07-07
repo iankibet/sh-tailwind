@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import ShRange from '../components/form/inputs/ShRange.vue'
 import ShForm from '../components/form/ShForm.vue'
 import ShDialog from '../components/overlay/ShDialog.vue'
 import ShDrawer from '../components/overlay/ShDrawer.vue'
@@ -12,6 +13,9 @@ import ShTable from '../components/table/ShTable.vue'
 import ShTabs from '../components/navigation/ShTabs.vue'
 import PinInput from '../components/form/inputs/PinInput.vue'
 import { demoUsers } from './demoData.js'
+
+// --- Standalone ShRange state ------------------------------------------------
+const selectedRangeState = ref(null)
 
 // --- ShTabs -----------------------------------------------------------------
 const tabVariant = ref('underline')
@@ -146,6 +150,7 @@ const statusClass = (status) => ({
                 :per-page="6"
                 cache
                 searchable
+                has-range
             >
                 <template #cell-status="{ value }">
                     <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize" :class="statusClass(value)">
@@ -153,6 +158,18 @@ const statusClass = (status) => ({
                     </span>
                 </template>
             </ShTable>
+        </section>
+
+        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+            <h2 class="text-lg font-semibold">Standalone ShRange Component</h2>
+            <div class="flex flex-col gap-2">
+                <p class="text-sm text-gray-500 font-medium text-slate-500">Allows selecting date ranges using presets or custom fields, returning range data dynamically.</p>
+                <div class="w-full md:w-auto">
+                    <ShRange v-model="selectedRangeState" />
+                </div>
+                <p class="text-xs font-semibold text-slate-600 mt-2">Bound state value:</p>
+                <pre class="rounded-lg bg-slate-50 p-3 text-xs text-slate-800 overflow-auto max-h-40">{{ selectedRangeState }}</pre>
+            </div>
         </section>
 
         <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
