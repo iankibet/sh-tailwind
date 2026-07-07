@@ -1,5 +1,5 @@
 <script setup>
-import { computed, getCurrentInstance, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, getCurrentInstance, onBeforeUnmount, ref, watch, useSlots } from 'vue'
 import { shRepo, shApis, useUserStore, getShConfig, shStorage } from '@iankibetsh/sh-core'
 import { useTheme } from '../../theme/useTheme.js'
 import { useTableData } from '../../table/useTableData.js'
@@ -213,6 +213,9 @@ const cellValue = (row, column) => {
 }
 
 // --- actions -----------------------------------------------------------------
+const slots = useSlots()
+const hasActions = computed(() => props.actions.length > 0 || !!slots.actions)
+
 const allowed = (item) => !item.permission || userStore.isAllowedTo(item.permission)
 const visibleActions = (row) =>
     props.actions.filter(action => allowed(action) && (action.show ? action.show(row) : true))
@@ -287,7 +290,7 @@ const runMultiAction = (action) => {
 const colSpan = computed(() =>
     cols.value.length +
     (activeMultiActions.value.length ? 1 : 0) +
-    (props.actions.length ? 1 : 0)
+    (hasActions.value ? 1 : 0)
 )
 
 defineExpose({ reload: () => reloadData(), records })
@@ -345,7 +348,9 @@ defineExpose({ reload: () => reloadData(), records })
                                 </a>
                                 <template v-else>{{ column.label }}</template>
                             </th>
-                            <th v-if="actions.length" :class="t.th" class="text-right">Actions</th>
+                            <th v-if="hasActions" :class="t.th" class="text-right">
+                                {{ actions.length ? 'Actions' : '' }}
+                            </th>
                         </tr>
                     </thead>
                     <tbody :class="t.tbody">
@@ -375,7 +380,7 @@ defineExpose({ reload: () => reloadData(), records })
                                     <span v-else v-html="cellValue(row, column)" />
                                 </slot>
                             </td>
-                            <td v-if="actions.length" :class="t.actionsCell" @click.stop>
+                            <td v-if="hasActions" :class="t.actionsCell" @click.stop>
                                 <slot name="actions" :row="row">
                                     <a
                                         v-for="action in visibleActions(row)"
@@ -422,7 +427,7 @@ defineExpose({ reload: () => reloadData(), records })
                             </slot>
                         </div>
                     </template>
-                    <div v-if="actions.length" class="mt-2" @click.stop>
+                    <div v-if="hasActions" class="mt-2" @click.stop>
                         <slot name="actions" :row="row">
                             <a
                                 v-for="action in visibleActions(row)"
