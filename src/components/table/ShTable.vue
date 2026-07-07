@@ -50,6 +50,9 @@ const emit = defineEmits(['rowClick', 'loaded', 'action'])
 const t = useTheme('table', computed(() => props.classes))
 const userStore = useUserStore()
 
+const slots = useSlots()
+const hasActions = computed(() => props.actions.length > 0 || !!slots.actions)
+
 // vue-router is optional: use the app's router when installed, otherwise
 // fall back to a full page navigation
 const router = getCurrentInstance()?.appContext.config.globalProperties.$router ?? null
@@ -62,12 +65,24 @@ const navigate = (path) => {
 }
 
 // --- columns -------------------------------------------------------------
+const actionsColumn = computed(() => {
+    const found = props.columns.find(col => {
+        const name = typeof col === 'string' ? col : col.name
+        return name === 'actions'
+    })
+    if (!found) return null
+    return typeof found === 'string' ? { name: found, label: 'Actions' } : { label: 'Actions', ...found }
+})
+
 const cols = computed(() => props.columns.map(col => {
     const column = typeof col === 'string' ? { name: col } : { ...col }
     column.label = column.label ?? startCase(column.name.split('.').pop())
     column.sortable = column.sortable ?? !column.component
     return column
-}).filter(column => (column.show ? column.show() : true)))
+}).filter(column => {
+    if (column.name === 'actions' && hasActions.value) return false
+    return column.show ? column.show() : true
+}))
 
 // --- query state ----------------------------------------------------------
 const perPageStorageKey = () => {
@@ -213,9 +228,6 @@ const cellValue = (row, column) => {
 }
 
 // --- actions -----------------------------------------------------------------
-const slots = useSlots()
-const hasActions = computed(() => props.actions.length > 0 || !!slots.actions)
-
 const allowed = (item) => !item.permission || userStore.isAllowedTo(item.permission)
 const visibleActions = (row) =>
     props.actions.filter(action => allowed(action) && (action.show ? action.show(row) : true))
@@ -349,7 +361,7 @@ defineExpose({ reload: () => reloadData(), records })
                                 <template v-else>{{ column.label }}</template>
                             </th>
                             <th v-if="hasActions" :class="t.th" class="text-right">
-                                {{ actions.length ? 'Actions' : '' }}
+                                {{ actionsColumn ? actionsColumn.label : (actions.length ? 'Actions' : '') }}
                             </th>
                         </tr>
                     </thead>
