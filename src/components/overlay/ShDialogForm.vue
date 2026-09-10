@@ -23,12 +23,30 @@ const props = defineProps({
     retainData: Boolean,
     preSubmit: Function,
     hiddenId: { type: Boolean, default: true },
-    classes: Object
+    classes: Object,
+    // Optional two-way open control. Omit to keep the built-in trigger button
+    // and let the component manage its own open state.
+    open: { type: Boolean, default: undefined }
 })
-const emit = defineEmits(['success', 'error', 'fieldChanged', 'opened', 'closed'])
+const emit = defineEmits(['success', 'error', 'fieldChanged', 'opened', 'closed', 'update:open'])
 
 const buttons = useTheme('buttons')
-const open = ref(false)
+
+const controlled = computed(() => props.open !== undefined)
+const internalOpen = ref(false)
+if (import.meta.env?.DEV && props.open !== undefined && typeof props.open !== 'boolean') {
+    console.warn('[ShDialogForm] `v-model:open` expects a boolean, got', typeof props.open)
+}
+const open = computed({
+    get: () => (controlled.value ? props.open : internalOpen.value),
+    set: (value) => {
+        if (controlled.value) {
+            emit('update:open', value)
+        } else {
+            internalOpen.value = value
+        }
+    }
+})
 
 // Re-key the form whenever the record being edited changes
 const formKey = computed(() => JSON.stringify(props.currentData ?? {}))
@@ -44,7 +62,7 @@ defineExpose({
 </script>
 
 <template>
-    <button type="button" :class="btnClass ?? buttons.primary" @click="open = true">
+    <button v-if="!controlled" type="button" :class="btnClass ?? buttons.primary" @click="open = true">
         <slot name="trigger">{{ title ?? 'Open form' }}</slot>
     </button>
     <ShDialog

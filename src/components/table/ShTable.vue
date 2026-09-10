@@ -236,6 +236,22 @@ const activeMultiActions = computed(() => props.multiActions.filter(allowed))
 const fillPlaceholders = (template, row) =>
     String(template).replace(/\{(.*?)\}/g, (_, key) => getPath(row, key))
 
+// Row `url` actions POST the row id by default so Streamline `stream:method`
+// actions resolve the record without hand-built `{id}` URLs. Opt out with
+// `sendRowId: false`, or point at another column with `idKey`. An explicit
+// `id` inside `action.data` always wins.
+const actionPayload = (action, row) => {
+    const data = action.data ?? {}
+    if (action.sendRowId === false || 'id' in data) {
+        return action.data
+    }
+    const id = getPath(row, action.idKey ?? 'id')
+    if (id === undefined || id === null || id === '') {
+        return action.data
+    }
+    return { ...data, id }
+}
+
 const runAction = async (action, row) => {
     if (action.handler) {
         return action.handler(row)
@@ -250,8 +266,9 @@ const runAction = async (action, row) => {
     }
     if (action.url) {
         const url = fillPlaceholders(action.url, row)
+        const payload = actionPayload(action, row)
         if (action.confirm) {
-            const res = await shRepo.runPlainRequest(url, action.confirm, action.label, action.data)
+            const res = await shRepo.runPlainRequest(url, action.confirm, action.label, payload)
             if (res.isConfirmed && res.value?.success) {
                 shRepo.showToast(res.value.response?.message ?? 'Action successful')
                 reloadData()
@@ -261,7 +278,7 @@ const runAction = async (action, row) => {
             return
         }
         try {
-            const res = await shApis.doPost(url, action.data)
+            const res = await shApis.doPost(url, payload)
             shRepo.showToast(res.data?.message ?? 'Action successful')
             reloadData()
         } catch (reason) {

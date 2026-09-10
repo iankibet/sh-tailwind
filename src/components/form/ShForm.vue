@@ -17,6 +17,7 @@ import DateInput from './inputs/DateInput.vue'
 import SelectInput from './inputs/SelectInput.vue'
 import PhoneInput from './inputs/PhoneInput.vue'
 import ShSuggest from './inputs/ShSuggest.vue'
+import FileInput from './inputs/FileInput.vue'
 
 const props = defineProps({
     action: { type: String, required: true },
@@ -55,7 +56,8 @@ const builtins = {
     date: DateInput,
     select: SelectInput,
     phone: PhoneInput,
-    suggest: ShSuggest
+    suggest: ShSuggest,
+    file: FileInput
 }
 
 const formFields = ref([])
@@ -129,6 +131,7 @@ const inputProps = (field) => ({
     ...(field.type === 'date' ? { withTime: field.withTime, min: field.min, max: field.max } : {}),
     ...(field.type === 'phone' ? { countryCode: field.countryCode, detectCountry: field.detectCountry } : {}),
     ...(field.type === 'pin' ? { length: field.length ?? field.digits, secret: field.secret } : {}),
+    ...(field.type === 'file' ? { accept: field.accept, multiple: field.multiple } : {}),
     ...(field.mask && field.type !== 'pin' ? { mask: field.mask } : {}),
     ...(field.props ?? {})
 })
@@ -148,6 +151,32 @@ const collectData = () => {
         }
     })
     return data
+}
+
+const hasFile = (value) =>
+    value instanceof File ||
+    value instanceof Blob ||
+    (Array.isArray(value) && value.some(hasFile))
+
+// Returns a plain object unless the payload carries a file, in which case it
+// is flattened into FormData (arrays as `key[]`, plain objects JSON-encoded).
+const toRequestPayload = (data) => {
+    if (!Object.values(data).some(hasFile)) {
+        return data
+    }
+    const form = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach(item => form.append(`${key}[]`, item))
+        } else if (value instanceof File || value instanceof Blob) {
+            form.append(key, value)
+        } else if (value !== null && typeof value === 'object') {
+            form.append(key, JSON.stringify(value))
+        } else if (value !== null && value !== undefined) {
+            form.append(key, value)
+        }
+    })
+    return form
 }
 
 const clearValues = () => {
@@ -191,17 +220,30 @@ const submitForm = async () => {
     }
     emit('preSubmit', data)
 
+    // Any File/FileList in the payload switches the request to multipart so
+    // Streamline actions can read it via request()->file(). Laravel needs a
+    // POST for multipart, so a PUT/PATCH is tunnelled with _method.
+    const payload = toRequestPayload(data)
+
     const methods = {
         post: shApis.doPost,
         put: shApis.doPut,
         patch: shApis.doPatch,
         delete: shApis.doDelete
     }
-    const send = methods[props.method.toLowerCase()] ?? shApis.doPost
+    const method = props.method.toLowerCase()
+    const isMultipart = payload instanceof FormData
+    // multipart always goes over POST; other verbs are tunnelled
+    const send = isMultipart
+        ? shApis.doPost
+        : (methods[method] ?? shApis.doPost)
+    if (isMultipart && method !== 'post') {
+        payload.append('_method', method.toUpperCase())
+    }
 
     submitting.value = true
     try {
-        const res = await send(props.action, data)
+        const res = await send(props.action, payload)
         if (props.successMessage) {
             shRepo.showToast(props.successMessage)
         }

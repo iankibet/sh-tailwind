@@ -72,6 +72,13 @@ export function useTableData ({ query, cacheEnabled = () => false, networkTimeou
                 return
             }
             const response = res.data?.data ?? res.data
+            if (import.meta.env?.DEV && (response === null || typeof response !== 'object' || !('data' in response))) {
+                console.warn(
+                    `[ShTable] "${endpoint}" returned HTTP 200 but no recognizable paginator ` +
+                    '({ data: [...], total, per_page }). The list will render empty. ' +
+                    'Backend list actions must return `->tableResponse()`.'
+                )
+            }
             apply(response, { append })
             offline.value = false
             fromCache.value = false
