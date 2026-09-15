@@ -115,6 +115,9 @@ const inputClass = (field) => {
 }
 
 const inputProps = (field) => ({
+    name: field.name,
+    id: field.id ?? field.name,
+    ...(field.autocomplete !== undefined ? { autocomplete: field.autocomplete } : {}),
     placeholder: field.placeholder || undefined,
     disabled: props.disabled || field.disabled,
     ...(field.type === 'select' || field.type === 'suggest'
@@ -282,7 +285,7 @@ const submitForm = async () => {
                 <div v-for="field in step.fields" :key="field.name" :class="field.type === 'hidden' ? '' : t.group">
                     <input v-if="field.type === 'hidden'" v-model="field.value" type="hidden">
                     <template v-else>
-                        <label v-if="field.label" :class="t.label">
+                        <label v-if="field.label" :for="field.id ?? field.name" :class="t.label">
                             {{ field.label }} <span v-if="field.required" :class="t.required">*</span>
                         </label>
                         <component

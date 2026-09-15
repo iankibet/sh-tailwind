@@ -18,7 +18,8 @@ const props = defineProps({
     // allow submitting free text that matches no option
     allowCustom: Boolean,
     // optional component rendered per option (receives :option)
-    optionTemplate: [Object, Function]
+    optionTemplate: [Object, Function],
+    autocomplete: { type: String, default: 'off' }
 })
 const emit = defineEmits(['update:modelValue', 'clearValidationErrors'])
 
@@ -170,7 +171,7 @@ onBeforeUnmount(() => {
             type="text"
             :placeholder="!multiple && selected.length ? selected[0].label : placeholder"
             :disabled="disabled"
-            autocomplete="off"
+            :autocomplete="autocomplete"
             @input="onInput"
             @keydown="onKeydown"
             @focus="open = true; emit('clearValidationErrors')"

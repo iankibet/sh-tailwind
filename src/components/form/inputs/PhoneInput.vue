@@ -13,7 +13,10 @@ const props = defineProps({
     disabled: Boolean,
     countryCode: { type: String, default: 'KE' },
     // opt-in backend lookup of the visitor country (GET sh-country-code)
-    detectCountry: Boolean
+    detectCountry: Boolean,
+    name: String,
+    id: String,
+    autocomplete: { type: String, default: 'tel' }
 })
 const emit = defineEmits(['update:modelValue', 'clearValidationErrors'])
 
@@ -151,6 +154,9 @@ onBeforeUnmount(() => {
         <input
             v-model="input"
             type="tel"
+            :name="name"
+            :id="id"
+            :autocomplete="autocomplete"
             :class="t.phone.input"
             :placeholder="placeholder"
             :disabled="disabled"

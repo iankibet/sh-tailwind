@@ -11,7 +11,9 @@ const props = defineProps({
     // render entries as dots (secret PIN) vs. visible (OTP code)
     secret: Boolean,
     isInvalid: Boolean,
-    disabled: Boolean
+    disabled: Boolean,
+    id: String,
+    autocomplete: { type: String, default: 'one-time-code' }
 })
 const emit = defineEmits(['update:modelValue', 'clearValidationErrors', 'complete'])
 
@@ -109,10 +111,11 @@ const boxClass = (index) => {
             v-for="(digit, index) in digits"
             :key="index"
             :ref="el => (boxes[index] = el)"
+            :id="index === 0 ? id : undefined"
             :value="digit"
             :type="secret ? 'password' : 'text'"
             inputmode="numeric"
-            autocomplete="one-time-code"
+            :autocomplete="autocomplete"
             maxlength="1"
             :disabled="disabled"
             :class="boxClass(index)"
