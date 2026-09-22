@@ -1,6 +1,6 @@
 {
   "name": "@iankibetsh/sh-tailwind",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Vue 3 + Tailwind CSS v4 component library for Laravel backends, built on @iankibetsh/sh-core. Forms, tables, tabs, dialogs, drawers and action components.",
   "type": "module",
   "main": "./dist/sh-tailwind.cjs.js",
@@ -34,7 +34,7 @@
   "license": "ISC",
   "peerDependencies": {
     "@iankibetsh/sh-core": "^1",
-    "pinia": "^3",
+    "pinia": "^3 || ^4",
     "vue": "^3.5",
     "vue-router": "^4 || ^5"
   },

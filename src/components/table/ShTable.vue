@@ -11,6 +11,13 @@ import ShRange from '../form/inputs/ShRange.vue'
 
 const props = defineProps({
     endpoint: { type: String, required: true },
+    // Extra static/dynamic query params merged into every request (e.g. a status
+    // filter). Reserved keys (order_by, page, filter_value, ...) always win if
+    // you happen to reuse one. Changing this resets to page 1 and reloads. Must be
+    // a plain object, not an array — a bare array spreads into numeric-index keys
+    // ({0: ..., 1: ...}); to send a list, key it: { ids: [1, 3] } (axios sends it
+    // as ids[]=1&ids[]=3, Laravel reads it as request()->input('ids') === [1, 3]).
+    params: { type: Object, default: () => ({}) },
     /**
      * Column schema: strings or objects
      * { name (dot-path ok), label, format ('date'|'datetime'|'number'|'money'),
@@ -121,6 +128,7 @@ const cacheEnabled = computed(() => {
 
 const buildQuery = () => {
     const params = {
+        ...props.params,
         order_by: orderBy.value,
         order_method: orderMethod.value,
         per_page: perPage.value,
@@ -206,6 +214,10 @@ watch(() => props.endpoint, () => {
     perPage.value = initialPerPage()
     reloadData()
 })
+watch(() => props.params, () => {
+    page.value = 1
+    reloadData()
+}, { deep: true })
 
 // --- cell rendering ---------------------------------------------------------
 const cellValue = (row, column) => {
