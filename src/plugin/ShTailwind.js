@@ -1,11 +1,12 @@
 import { ShCore } from '@iankibetsh/sh-core'
 import { defaultTheme } from '../theme/defaultTheme.js'
-import { SH_TW_THEME, SH_TW_COMPONENTS } from '../theme/keys.js'
+import { SH_TW_THEME, SH_TW_COMPONENTS, SH_TW_POPUPS } from '../theme/keys.js'
+import { createPopupManager } from '../popups/popupManager.js'
 import { deepMerge } from '../utils/deepMerge.js'
 
 // Tailwind UI layer plugin: installs sh-core (API client, auth strategy,
 // config, session, v-if-user-can) then provides the theme and input
-// component overrides. Registers no routes in v1 (options.router reserved
+// component overrides and the popup registry (`popups: { Name: component | () => import(...) }`). Registers no routes in v1 (options.router reserved
 // for a future Tailwind ShAuth).
 export const ShTailwind = {
     install (app, options = {}) {
@@ -14,6 +15,7 @@ export const ShTailwind = {
         const theme = deepMerge(defaultTheme, options.theme ?? {})
         app.provide(SH_TW_THEME, theme)
         app.provide(SH_TW_COMPONENTS, options.formComponents ?? {})
+        app.provide(SH_TW_POPUPS, createPopupManager(app, options.popups ?? {}))
 
         // Compat bridge for ecosystem components that inject the legacy keys
         app.provide('formComponents', options.formComponents ?? {})

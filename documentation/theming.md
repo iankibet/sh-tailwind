@@ -23,13 +23,15 @@ Theme values are **complete** Tailwind utility strings, never interpolated fragm
 ```js
 // plugin & theme
 ShTailwind, createShTailwind, defaultTheme, useTheme,
-SH_TW_THEME, SH_TW_COMPONENTS, SH_DIALOG_CONTEXT
+SH_TW_THEME, SH_TW_COMPONENTS, SH_DIALOG_CONTEXT, SH_TW_POPUPS, SH_POPUP_CONTEXT
 // form
 ShForm, ShFormSteps
 // navigation
 ShTabs
 // overlays
 ShDialog, ShDrawer, ShDialogBtn, ShDrawerBtn, ShDialogForm, useDialog
+// popups
+ShPopups, ShPopupLink, ShPopupForm, usePopups, usePopupContext
 // table
 ShTable, ShTablePagination, useTableData, localQuery, shTableCache, clearTableCache
 // actions

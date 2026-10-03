@@ -39,6 +39,7 @@ An action runs the **first** matching key, so you pick the style per action:
 | `emit: 'name'` | emits `@name(row)` (and a generic `@action('name', row)`) |
 | `link: '/x/{id}'` | router push (or `location` without vue-router); `{id}` filled from the row |
 | `url: 'x/{id}'` | POST (optionally behind `confirm: 'msg'`), toast the result, reload |
+| `popup: 'ViewUser'` or `{ comp, type, title: '{name}', size, side, static, props: row => ({}), reload }` | opens a [URL popup](popups.md) with `{ id: row.id }` as props by default; reloads the table when it closes after a form success |
 
 ```js
 const userActions = [

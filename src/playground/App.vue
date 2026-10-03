@@ -12,7 +12,19 @@ import ShSilentAction from '../components/actions/ShSilentAction.vue'
 import ShTable from '../components/table/ShTable.vue'
 import ShTabs from '../components/navigation/ShTabs.vue'
 import PinInput from '../components/form/inputs/PinInput.vue'
+import ShPopups from '../components/overlay/ShPopups.vue'
+import ShPopupLink from '../components/overlay/ShPopupLink.vue'
+import { usePopups } from '../popups/usePopups.js'
 import { demoUsers } from './demoData.js'
+
+// --- Popups -------------------------------------------------------------------
+const popups = usePopups()
+const lastClosed = ref(null)
+popups.onClosed(info => { lastClosed.value = `${info.name} → ${info.reason}` })
+const popupUserActions = [
+    { label: 'Peek', popup: { comp: 'DemoUserCard', type: 'drawer', title: '{name}' } },
+    { label: 'Edit', popup: { comp: 'DemoEditUser', title: 'Edit {name}' } }
+]
 
 // --- Standalone ShRange state ------------------------------------------------
 const selectedRangeState = ref(null)
@@ -265,6 +277,29 @@ const statusClass = (status) => ({
             <ShDrawer v-model:open="drawerOpen" :position="drawerPosition" title="Drawer">
                 <p class="text-sm text-gray-600">Slides from {{ drawerPosition }}.</p>
             </ShDrawer>
+        </section>
+
+        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+            <h2 class="text-lg font-semibold">URL popups (ShPopups)</h2>
+            <p class="text-sm text-gray-600">Every popup below lives in the URL: refresh keeps it open, Back closes the top one, popups stack.</p>
+            <div class="flex flex-wrap gap-3 text-sm">
+                <ShPopupLink comp="DemoUserCard" type="drawer" title="User 3" :props="{ id: 3 }" class="rounded-md bg-emerald-600 px-4 py-2 font-medium text-white">
+                    ShPopupLink (drawer)
+                </ShPopupLink>
+                <button class="rounded-md bg-blue-600 px-4 py-2 font-medium text-white" @click="popups.open('DemoEditUser', { title: 'Edit user 7', props: { id: 7 } })">
+                    usePopups().open() (lazy)
+                </button>
+                <a href="/?popup=modal&comp=ShQueryForm&title=New task&action=demo/tasks&fields=name,email,phone" class="rounded-md bg-gray-700 px-4 py-2 font-medium text-white">
+                    Legacy shframework link
+                </a>
+                <a href="/users/12/peek" class="rounded-md bg-purple-600 px-4 py-2 font-medium text-white" @click.prevent="$router.push('/users/12/peek')">
+                    Route meta popup
+                </a>
+                <ShPopupLink comp="NotRegistered" class="rounded-md border border-gray-300 px-4 py-2">Unregistered name</ShPopupLink>
+            </div>
+            <p class="text-xs text-gray-500">Last closed: {{ lastClosed ?? '—' }}</p>
+            <ShTable endpoint="demo/users" :columns="['id', 'name', 'email']" :actions="popupUserActions" :per-page="5" />
+            <ShPopups />
         </section>
 
         <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">

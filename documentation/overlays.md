@@ -4,6 +4,8 @@
 
 Tailwind-native modal and slide-over panels — Teleport + Transition, no Bootstrap JS.
 
+Need the overlay in the URL (refresh-safe, linkable, closes on Back, stackable)? Use [Popups](popups.md).
+
 ## Example
 
 ```vue

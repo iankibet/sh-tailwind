@@ -1,11 +1,12 @@
 // Plugin + theming
 export { ShTailwind, createShTailwind } from './plugin/ShTailwind.js'
 export { defaultTheme } from './theme/defaultTheme.js'
-export { SH_TW_THEME, SH_TW_COMPONENTS, SH_DIALOG_CONTEXT } from './theme/keys.js'
+export { SH_TW_THEME, SH_TW_COMPONENTS, SH_DIALOG_CONTEXT, SH_TW_POPUPS, SH_POPUP_CONTEXT } from './theme/keys.js'
 export { useTheme } from './theme/useTheme.js'
 
 // Composables
 export { useDialog } from './composables/useDialog.js'
+export { usePopups, usePopupContext } from './popups/usePopups.js'
 
 // Form
 export { default as ShForm } from './components/form/ShForm.vue'
@@ -17,6 +18,11 @@ export { default as ShDrawer } from './components/overlay/ShDrawer.vue'
 export { default as ShDialogBtn } from './components/overlay/ShDialogBtn.vue'
 export { default as ShDrawerBtn } from './components/overlay/ShDrawerBtn.vue'
 export { default as ShDialogForm } from './components/overlay/ShDialogForm.vue'
+
+// URL-driven popups
+export { default as ShPopups } from './components/overlay/ShPopups.vue'
+export { default as ShPopupLink } from './components/overlay/ShPopupLink.vue'
+export { default as ShPopupForm } from './components/overlay/ShPopupForm.vue'
 
 // Table
 export { default as ShTable } from './components/table/ShTable.vue'

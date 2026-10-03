@@ -1,0 +1,22 @@
+# @iankibetsh/sh-tailwind
+
+> Vue 3 + Tailwind CSS v4 component library for Laravel (Streamline) backends, built on @iankibetsh/sh-core. Schema-driven forms, server-driven tables, dialogs/drawers, URL-driven popups, tabs and one-click action buttons. Import everything from `@iankibetsh/sh-tailwind`.
+
+These guides ship with the package. In an app that has it installed, read them at `node_modules/@iankibetsh/sh-tailwind/documentation/`; they match the installed version exactly. Paths below are relative to this file.
+
+## Docs
+
+- [Overview](README.md): what's in the package, one example per module, peer dependencies
+- [Getting started](documentation/getting-started.md): install, Tailwind `@source`, the `ShTailwind` plugin and its options (incl. `popups`, `theme`, `formComponents`)
+- [Forms](documentation/forms.md): `ShForm` / `ShDialogForm` / `ShFormSteps` — field schema, type inference, Laravel 422 errors, multi-step wizards, file uploads
+- [Inputs & masks](documentation/inputs.md): standalone inputs, money/pattern masks, PIN, phone, select, suggest, range
+- [Table](documentation/table.md): `ShTable` — columns, row/bulk actions (`handler`, `emit`, `link`, `popup`, `url`), pagination, offline IndexedDB cache
+- [Tabs](documentation/tabs.md): `ShTabs` — slot, component and router modes
+- [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn`, `v-model:open`, stacking, `useDialog`
+- [Popups](documentation/popups.md): `ShPopups` / `ShPopupLink` / `usePopups` — URL-driven dialogs/drawers that survive refresh, close on Back and stack; route-meta popups; migration from shframework
+- [Actions](documentation/actions.md): `ShConfirmAction` (confirm → POST → toast) and `ShSilentAction`
+- [Theming](documentation/theming.md): the three override layers and the full export list
+
+## Optional
+
+- [Source](src/index.js): every public export; components live under `src/components/`

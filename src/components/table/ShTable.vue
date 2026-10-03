@@ -1,7 +1,8 @@
 <script setup>
-import { computed, getCurrentInstance, onBeforeUnmount, ref, watch, useSlots } from 'vue'
+import { computed, getCurrentInstance, inject, onBeforeUnmount, ref, watch, useSlots } from 'vue'
 import { shRepo, shApis, useUserStore, getShConfig, shStorage } from '@iankibetsh/sh-core'
 import { useTheme } from '../../theme/useTheme.js'
+import { SH_TW_POPUPS } from '../../theme/keys.js'
 import { useTableData } from '../../table/useTableData.js'
 import { getPath } from '../../table/localQuery.js'
 import { startCase } from '../../utils/strings.js'
@@ -29,6 +30,8 @@ const props = defineProps({
      * Row actions:
      * { label, emit ('edit' -> @edit(row)), handler (fn(row)),
      *   link ('/users/{id}' -> router.push), url ('users/{id}/x' -> POST),
+     *   popup ('ViewUser' | { comp, type, title, size, side, static,
+     *          props (fn(row) -> {}), reload } -> URL popup, reloads on success),
      *   confirm ('message' -> swal confirm before POST),
      *   permission, show (fn(row) -> bool), class }
      */
@@ -264,6 +267,31 @@ const actionPayload = (action, row) => {
     return { ...data, id }
 }
 
+// Opens a registered popup for the row (default props: { id }) and reloads
+// the table when it closes after a successful form submit.
+const popups = inject(SH_TW_POPUPS, null)
+const openPopup = (action, row) => {
+    if (!popups) {
+        console.warn('[ShTable] `popup` actions need the ShTailwind plugin')
+        return
+    }
+    const spec = typeof action.popup === 'string' ? { comp: action.popup } : action.popup
+    const idKey = action.idKey ?? 'id'
+    return popups.open(spec.comp, {
+        type: spec.type,
+        title: fillPlaceholders(spec.title ?? action.label, row),
+        size: spec.size,
+        side: spec.side,
+        static: spec.static,
+        props: spec.props ? spec.props(row) : { [idKey]: getPath(row, idKey) },
+        onClose: ({ reason, result }) => {
+            if (spec.reload !== false && (reason === 'success' || result?.reload)) {
+                reloadData()
+            }
+        }
+    })
+}
+
 const runAction = async (action, row) => {
     if (action.handler) {
         return action.handler(row)
@@ -275,6 +303,9 @@ const runAction = async (action, row) => {
     }
     if (action.link) {
         return navigate(fillPlaceholders(action.link, row))
+    }
+    if (action.popup) {
+        return openPopup(action, row)
     }
     if (action.url) {
         const url = fillPlaceholders(action.url, row)
