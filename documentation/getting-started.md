@@ -25,14 +25,14 @@ With the **PostCSS plugin or CLI**, add an `@source` directive so Tailwind scans
 
 The path is relative to the CSS file. **If components render unstyled, this line is what's missing.** The package ships its `src/` for exactly this reason.
 
-The default theme is **light only** — it never emits `dark:` variants, so it won't fight your app's theme. Dark mode is opt-in via [theming](theming.md).
+The default theme is **light only** — it never emits `dark:` variants, so it won't fight your app's theme. For a brand colour from one CSS variable plus dark mode, use the [token preset](theming.md#tokens-brand-colour-and-dark-mode).
 
 ## Plugin
 
 ```js
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { ShTailwind } from '@iankibetsh/sh-tailwind'
+import { ShTailwind, tokenTheme } from '@iankibetsh/sh-tailwind'
 
 const app = createApp(App)
 app.use(createPinia())
@@ -44,7 +44,9 @@ app.use(ShTailwind, {
     enableTableCache: true,        // default cache flag for ShTable
 
     // sh-tailwind options:
+    preset: tokenTheme,                              // optional: brand colour + dark mode (see theming)
     theme: { form: { submitBtn: 'rounded-lg bg-indigo-600 px-4 py-2 text-white ...' } },
+    popups: { /* ViewTask: () => import('./ViewTask.vue') */ },   // URL popups (see popups)
     formComponents: { /* date: MyDatePicker */ }   // replace input types globally
 })
 ```

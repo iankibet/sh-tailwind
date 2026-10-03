@@ -21,15 +21,15 @@ const edit = () => popups.open('DemoEditUser', {
 <template>
     <div v-if="user" class="space-y-4 text-sm">
         <dl class="grid grid-cols-3 gap-y-2">
-            <dt class="text-gray-500">ID</dt><dd class="col-span-2">{{ user.id }} <span class="text-xs text-gray-400">({{ typeof id }})</span></dd>
-            <dt class="text-gray-500">Name</dt><dd class="col-span-2">{{ user.name }}</dd>
-            <dt class="text-gray-500">Email</dt><dd class="col-span-2">{{ user.email }}</dd>
-            <dt class="text-gray-500">Role</dt><dd class="col-span-2">{{ user.role }}</dd>
+            <dt class="text-fg-subtle">ID</dt><dd class="col-span-2">{{ user.id }} <span class="text-xs text-fg-subtle">({{ typeof id }})</span></dd>
+            <dt class="text-fg-subtle">Name</dt><dd class="col-span-2">{{ user.name }}</dd>
+            <dt class="text-fg-subtle">Email</dt><dd class="col-span-2">{{ user.email }}</dd>
+            <dt class="text-fg-subtle">Role</dt><dd class="col-span-2">{{ user.role }}</dd>
         </dl>
         <div class="flex gap-2">
-            <button class="rounded-md bg-blue-600 px-3 py-1.5 text-white" @click="edit">Edit (stacks a dialog)</button>
-            <button class="rounded-md border border-gray-300 px-3 py-1.5" @click="popup.close({ reload: true })">Close &amp; reload table</button>
+            <button class="rounded-md bg-primary px-3 py-1.5 text-white" @click="edit">Edit (stacks a dialog)</button>
+            <button class="rounded-md border border-line-strong px-3 py-1.5" @click="popup.close({ reload: true })">Close &amp; reload table</button>
         </div>
     </div>
-    <p v-else class="text-sm text-gray-500">User {{ id }} not found.</p>
+    <p v-else class="text-sm text-fg-subtle">User {{ id }} not found.</p>
 </template>

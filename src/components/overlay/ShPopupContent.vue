@@ -46,13 +46,13 @@ provide(SH_POPUP_CONTEXT, {
 </script>
 
 <template>
-    <div v-if="status === 'loading'" class="flex justify-center py-10 text-gray-400">
+    <div v-if="status === 'loading'" class="flex justify-center py-10 opacity-50">
         <ShSpinner class="size-6" />
     </div>
-    <p v-else-if="status === 'missing'" class="text-sm text-red-600">
+    <p v-else-if="status === 'missing'" class="text-sm text-red-500">
         Popup "{{ entry.layer.name }}" is not registered.
     </p>
-    <p v-else-if="status === 'error'" class="text-sm text-red-600">
+    <p v-else-if="status === 'error'" class="text-sm text-red-500">
         Couldn't load this content. Please try again.
     </p>
     <component :is="component" v-else :key="contentKey" v-bind="bound" />

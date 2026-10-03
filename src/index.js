@@ -1,11 +1,13 @@
 // Plugin + theming
 export { ShTailwind, createShTailwind } from './plugin/ShTailwind.js'
 export { defaultTheme } from './theme/defaultTheme.js'
+export { tokenTheme } from './theme/tokenTheme.js'
 export { SH_TW_THEME, SH_TW_COMPONENTS, SH_DIALOG_CONTEXT, SH_TW_POPUPS, SH_POPUP_CONTEXT } from './theme/keys.js'
 export { useTheme } from './theme/useTheme.js'
 
 // Composables
 export { useDialog } from './composables/useDialog.js'
+export { useColorMode, COLOR_MODE_STORAGE_KEY } from './composables/useColorMode.js'
 export { usePopups, usePopupContext } from './popups/usePopups.js'
 
 // Form

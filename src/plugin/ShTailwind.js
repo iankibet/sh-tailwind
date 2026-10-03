@@ -12,7 +12,8 @@ export const ShTailwind = {
     install (app, options = {}) {
         ShCore.install(app, options)
 
-        const theme = deepMerge(defaultTheme, options.theme ?? {})
+        // preset (e.g. tokenTheme) replaces the defaults; theme then fine-tunes it
+        const theme = deepMerge(deepMerge(defaultTheme, options.preset ?? {}), options.theme ?? {})
         app.provide(SH_TW_THEME, theme)
         app.provide(SH_TW_COMPONENTS, options.formComponents ?? {})
         app.provide(SH_TW_POPUPS, createPopupManager(app, options.popups ?? {}))

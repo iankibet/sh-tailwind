@@ -16,7 +16,7 @@ Each module has its own guide under [`documentation/`](documentation/):
 | [Overlays](documentation/overlays.md) | `ShDialog` / `ShDrawer` and trigger/form helpers |
 | [Popups](documentation/popups.md) | `ShPopups` — URL-driven, stackable dialogs/drawers (refresh, links, Back) |
 | [Actions](documentation/actions.md) | `ShConfirmAction` / `ShSilentAction` |
-| [Theming](documentation/theming.md) | The three override layers + full export list |
+| [Theming](documentation/theming.md) | Token preset (brand colour + dark mode), override layers, full export list |
 
 These guides ship in the npm package, so they always match the installed version: `node_modules/@iankibetsh/sh-tailwind/documentation/`. **AI agents:** start at [`llms.txt`](llms.txt) (also shipped), which indexes every guide.
 

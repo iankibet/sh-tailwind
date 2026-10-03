@@ -15,7 +15,7 @@ These guides ship with the package. In an app that has it installed, read them a
 - [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn` / `ShDialogForm`, `v-model:open`, stacking, `useDialog`
 - [Popups](documentation/popups.md): `ShPopups` / `ShPopupLink` / `usePopups` — URL-driven dialogs/drawers that survive refresh, close on Back and stack; route-meta popups; migration from shframework
 - [Actions](documentation/actions.md): `ShConfirmAction` (confirm → POST → toast) and `ShSilentAction`, props with defaults and events
-- [Theming](documentation/theming.md): the three override layers and the full export list
+- [Theming](documentation/theming.md): presets and override layers, design tokens (`tokens.css` + `tokenTheme`: one-variable brand colour, token utilities like `bg-surface` / `text-fg`), dark mode with `useColorMode()`, full export list
 
 ## Optional
 

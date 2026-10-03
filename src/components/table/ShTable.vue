@@ -531,7 +531,7 @@ defineExpose({ reload: () => reloadData(), records })
         </template>
 
         <div v-if="selected.length && activeMultiActions.length" :class="t.multiBar">
-            <div class="text-sm text-gray-700">
+            <div class="text-sm">
                 <span :class="t.multiCount">{{ selected.length }}</span>
                 selected
             </div>

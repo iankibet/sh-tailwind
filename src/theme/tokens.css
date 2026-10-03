@@ -1,0 +1,74 @@
+/*
+ * @iankibetsh/sh-tailwind design tokens (Tailwind CSS v4).
+ *
+ *   @import 'tailwindcss';
+ *   @import '@iankibetsh/sh-tailwind/tokens.css';
+ *
+ * Then app.use(ShTailwind, { preset: tokenTheme }) and use the same utilities in
+ * your own markup: bg-canvas, bg-surface, bg-muted, border-line, text-fg,
+ * text-fg-muted, text-fg-subtle, bg-primary, text-on-primary, bg-primary-soft,
+ * text-primary-strong, and the secondary equivalents.
+ *
+ * Brand: set --sh-primary (and optionally --sh-secondary) on :root. Every
+ * shade is derived from it, so one hex re-colours everything.
+ * Dark mode: add the `dark` class to <html> (see useColorMode()).
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+    --sh-primary: #2563eb;
+    --sh-secondary: #64748b;
+    /* text/icons drawn on top of the primary / secondary colour */
+    --sh-on-primary: #ffffff;
+    --sh-on-secondary: #ffffff;
+
+    --sh-canvas: #f5f7f9;
+    --sh-surface: #ffffff;
+    --sh-muted: #f0f2f5;
+    --sh-line: #e3e7ec;
+    --sh-line-strong: #cdd3db;
+    --sh-fg: #111827;
+    --sh-fg-muted: #4b5563;
+    --sh-fg-subtle: #8a94a3;
+
+    color-scheme: light;
+}
+
+.dark {
+    --sh-canvas: #0b0f14;
+    --sh-surface: #121820;
+    --sh-muted: #1a212b;
+    --sh-line: #252d38;
+    --sh-line-strong: #36404d;
+    --sh-fg: #e8ecf1;
+    --sh-fg-muted: #a6b0bd;
+    --sh-fg-subtle: #6f7a89;
+
+    color-scheme: dark;
+}
+
+@theme inline {
+    --color-canvas: var(--sh-canvas);
+    --color-surface: var(--sh-surface);
+    --color-muted: var(--sh-muted);
+    --color-line: var(--sh-line);
+    --color-line-strong: var(--sh-line-strong);
+    --color-fg: var(--sh-fg);
+    --color-fg-muted: var(--sh-fg-muted);
+    --color-fg-subtle: var(--sh-fg-subtle);
+
+    --color-primary: var(--sh-primary);
+    --color-primary-hover: color-mix(in oklab, var(--sh-primary) 85%, black);
+    /* tinted fill for selected / highlighted rows, badges, icon wells */
+    --color-primary-soft: color-mix(in oklab, var(--sh-primary) 14%, var(--sh-surface));
+    /* readable primary text on surfaces and on primary-soft, in both modes */
+    --color-primary-strong: color-mix(in oklab, var(--sh-primary) 72%, var(--sh-fg));
+    --color-on-primary: var(--sh-on-primary);
+
+    --color-secondary: var(--sh-secondary);
+    --color-secondary-hover: color-mix(in oklab, var(--sh-secondary) 85%, black);
+    --color-secondary-soft: color-mix(in oklab, var(--sh-secondary) 14%, var(--sh-surface));
+    --color-secondary-strong: color-mix(in oklab, var(--sh-secondary) 72%, var(--sh-fg));
+    --color-on-secondary: var(--sh-on-secondary);
+}

@@ -15,7 +15,13 @@ import PinInput from '../components/form/inputs/PinInput.vue'
 import ShPopups from '../components/overlay/ShPopups.vue'
 import ShPopupLink from '../components/overlay/ShPopupLink.vue'
 import { usePopups } from '../popups/usePopups.js'
+import { useColorMode } from '../composables/useColorMode.js'
 import { demoUsers } from './demoData.js'
+
+// --- Colour mode + brand ------------------------------------------------------
+const { mode, setMode } = useColorMode()
+const primary = ref('#2563eb')
+const setPrimary = (value) => document.documentElement.style.setProperty('--sh-primary', value)
 
 // --- Popups -------------------------------------------------------------------
 const popups = usePopups()
@@ -114,44 +120,51 @@ const userMultiActions = [
 
 const statusClass = (status) => ({
     active: 'bg-emerald-100 text-emerald-700',
-    inactive: 'bg-gray-100 text-gray-600',
+    inactive: 'bg-muted text-fg-muted',
     pending: 'bg-amber-100 text-amber-700'
-}[status] ?? 'bg-gray-100 text-gray-600')
+}[status] ?? 'bg-muted text-fg-muted')
 </script>
 
 <template>
     <div class="mx-auto max-w-3xl space-y-10 p-8">
-        <h1 class="text-2xl font-bold text-gray-900">sh-tailwind playground</h1>
+        <div class="sticky top-0 z-30 flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface/90 p-3 backdrop-blur">
+            <span class="text-sm font-semibold">Theme</span>
+            <div class="inline-flex rounded-lg border border-line p-0.5">
+                <button v-for="m in ['light', 'dark', 'system']" :key="m" type="button" class="rounded-md px-3 py-1 text-xs font-medium capitalize" :class="mode === m ? 'bg-primary text-on-primary' : 'text-fg-muted hover:bg-muted'" @click="setMode(m)">{{ m }}</button>
+            </div>
+            <label class="ml-auto inline-flex items-center gap-2 text-xs text-fg-muted">Primary <input v-model="primary" type="color" class="size-7 cursor-pointer rounded border border-line bg-transparent" @input="setPrimary(primary)"></label>
+        </div>
+        <h1 class="text-2xl font-bold text-fg">sh-tailwind playground</h1>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Basic form (string fields, type inference)</h2>
             <ShForm action="demo/save:addUser" :fields="basicFields" success-message="Saved!" />
         </section>
 
-        <section class="space-y-6 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-6 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">PIN input (configurable digits)</h2>
             <div class="space-y-2">
-                <p class="text-sm font-medium text-gray-700">Standalone — 6-digit OTP</p>
+                <p class="text-sm font-medium text-fg-muted">Standalone — 6-digit OTP</p>
                 <PinInput v-model="otp" :length="6" />
-                <p class="text-xs text-gray-500">value: {{ otp || '—' }}</p>
+                <p class="text-xs text-fg-subtle">value: {{ otp || '—' }}</p>
             </div>
             <div class="space-y-2">
-                <p class="text-sm font-medium text-gray-700">Standalone — 4-digit masked PIN</p>
+                <p class="text-sm font-medium text-fg-muted">Standalone — 4-digit masked PIN</p>
                 <PinInput v-model="securePin" :length="4" mask />
-                <p class="text-xs text-gray-500">value: {{ securePin || '—' }}</p>
+                <p class="text-xs text-fg-subtle">value: {{ securePin || '—' }}</p>
             </div>
             <div class="space-y-2">
-                <p class="text-sm font-medium text-gray-700">Inside a ShForm (type: 'pin', digits/mask)</p>
+                <p class="text-sm font-medium text-fg-muted">Inside a ShForm (type: 'pin', digits/mask)</p>
                 <ShForm action="demo/pin" :fields="pinFields" submit-label="Verify" />
             </div>
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">ShTable — actions via direct <code>handler</code> callbacks</h2>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-fg-subtle">
                 Search, sort and paginate run against mock data. Row actions call a callback directly
                 (no <code>@event</code> wiring). Last action:
-                <span class="font-medium text-gray-800">{{ lastEvent || '—' }}</span>
+                <span class="font-medium text-fg">{{ lastEvent || '—' }}</span>
             </p>
             <ShTable
                 ref="tableRef"
@@ -172,28 +185,28 @@ const statusClass = (status) => ({
             </ShTable>
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Standalone ShRange Component</h2>
             <div class="flex flex-col gap-2">
-                <p class="text-sm text-gray-500 font-medium text-slate-500">Allows selecting date ranges using presets or custom fields, returning range data dynamically.</p>
+                <p class="text-sm text-fg-subtle font-medium text-fg-muted">Allows selecting date ranges using presets or custom fields, returning range data dynamically.</p>
                 <div class="w-full md:w-auto">
                     <ShRange v-model="selectedRangeState" />
                 </div>
-                <p class="text-xs font-semibold text-slate-600 mt-2">Bound state value:</p>
-                <pre class="rounded-lg bg-slate-50 p-3 text-xs text-slate-800 overflow-auto max-h-40">{{ selectedRangeState }}</pre>
+                <p class="text-xs font-semibold text-fg-muted mt-2">Bound state value:</p>
+                <pre class="rounded-lg bg-muted p-3 text-xs text-fg overflow-auto max-h-40">{{ selectedRangeState }}</pre>
             </div>
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">ShTabs — slot content, counts, variants, keyboard nav</h2>
             <div class="flex items-center gap-2">
-                <span class="text-sm text-gray-500">Variant:</span>
-                <select v-model="tabVariant" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+                <span class="text-sm text-fg-subtle">Variant:</span>
+                <select v-model="tabVariant" class="rounded-md border border-line-strong px-2 py-1 text-sm">
                     <option value="underline">underline</option>
                     <option value="pills">pills</option>
                     <option value="boxed">boxed</option>
                 </select>
-                <span class="text-xs text-gray-400">active: {{ activeTab }} · last change: {{ tabChange || '—' }}</span>
+                <span class="text-xs text-fg-subtle">active: {{ activeTab }} · last change: {{ tabChange || '—' }}</span>
             </div>
             <ShTabs
                 v-model:tab="activeTab"
@@ -202,52 +215,52 @@ const statusClass = (status) => ({
                 @change="(key) => (tabChange = key)"
             >
                 <template #tab-overview>
-                    <p class="text-sm text-gray-600">Overview panel — arrow keys move between tabs, Home/End jump to ends.</p>
+                    <p class="text-sm text-fg-muted">Overview panel — arrow keys move between tabs, Home/End jump to ends.</p>
                 </template>
                 <template #tab-activity>
-                    <p class="text-sm text-gray-600">Activity panel with a count bubble (12).</p>
+                    <p class="text-sm text-fg-muted">Activity panel with a count bubble (12).</p>
                 </template>
                 <template #tab-billing>
-                    <p class="text-sm text-gray-600">Billing panel — a zero count still renders its bubble.</p>
+                    <p class="text-sm text-fg-muted">Billing panel — a zero count still renders its bubble.</p>
                 </template>
             </ShTabs>
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Input masks (money, patterns)</h2>
-            <p class="text-sm text-gray-500">Type freely — values auto-format. v-model receives the raw number for money, the formatted string for patterns.</p>
+            <p class="text-sm text-fg-subtle">Type freely — values auto-format. v-model receives the raw number for money, the formatted string for patterns.</p>
             <ShForm action="demo/mask" :fields="maskFields" submit-label="Save" />
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Rich fields (select, suggest, number, date)</h2>
             <ShForm action="demo/rich" :fields="richFields" />
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Multi-step wizard</h2>
             <ShForm action="demo/wizard" :fields="basicFields" :steps="steps" submit-label="Create account" />
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Dialogs &amp; drawers</h2>
             <div class="flex flex-wrap gap-3">
-                <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white" @click="dialogOpen = true">v-model dialog</button>
-                <button class="rounded-md bg-gray-700 px-4 py-2 text-sm font-medium text-white" @click="staticDialog = true">Static dialog</button>
+                <button class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary" @click="dialogOpen = true">v-model dialog</button>
+                <button class="rounded-md bg-gray-700 px-4 py-2 text-sm font-medium text-on-primary" @click="staticDialog = true">Static dialog</button>
                 <ShDialogBtn title="Inline trigger dialog" size="lg">
                     <template #trigger>ShDialogBtn</template>
-                    <p class="text-sm text-gray-600">Opened via the inline trigger component.</p>
+                    <p class="text-sm text-fg-muted">Opened via the inline trigger component.</p>
                 </ShDialogBtn>
-                <select v-model="drawerPosition" class="rounded-md border border-gray-300 px-2 py-1 text-sm">
+                <select v-model="drawerPosition" class="rounded-md border border-line-strong px-2 py-1 text-sm">
                     <option value="start">start</option>
                     <option value="end">end</option>
                     <option value="top">top</option>
                     <option value="bottom">bottom</option>
                 </select>
-                <button class="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white" @click="drawerOpen = true">Drawer</button>
+                <button class="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-on-primary" @click="drawerOpen = true">Drawer</button>
                 <ShDrawerBtn title="Inline drawer" position="start">
                     <template #trigger>ShDrawerBtn</template>
-                    <p class="text-sm text-gray-600">Drawer via trigger component.</p>
+                    <p class="text-sm text-fg-muted">Drawer via trigger component.</p>
                 </ShDrawerBtn>
                 <ShDialogForm
                     title="New user"
@@ -260,49 +273,49 @@ const statusClass = (status) => ({
             </div>
 
             <ShDialog v-model:open="dialogOpen" title="Hello from ShDialog" size="md">
-                <p class="text-sm text-gray-600">Escape, backdrop click and the X all close me. Body scroll is locked.</p>
-                <button class="mt-4 rounded-md bg-purple-600 px-3 py-1.5 text-sm text-white" @click="stacked = true">Stack another</button>
+                <p class="text-sm text-fg-muted">Escape, backdrop click and the X all close me. Body scroll is locked.</p>
+                <button class="mt-4 rounded-md bg-purple-600 px-3 py-1.5 text-sm text-on-primary" @click="stacked = true">Stack another</button>
                 <ShDialog v-model:open="stacked" title="Stacked dialog" size="sm">
-                    <p class="text-sm text-gray-600">Escape closes only me (topmost) first.</p>
+                    <p class="text-sm text-fg-muted">Escape closes only me (topmost) first.</p>
                 </ShDialog>
                 <template #footer="{ close }">
-                    <button class="rounded-md border border-gray-300 px-3 py-1.5 text-sm" @click="close()">Close</button>
+                    <button class="rounded-md border border-line-strong px-3 py-1.5 text-sm" @click="close()">Close</button>
                 </template>
             </ShDialog>
 
             <ShDialog v-model:open="staticDialog" title="Static dialog" static>
-                <p class="text-sm text-gray-600">Backdrop click pulses instead of closing. Use the X.</p>
+                <p class="text-sm text-fg-muted">Backdrop click pulses instead of closing. Use the X.</p>
             </ShDialog>
 
             <ShDrawer v-model:open="drawerOpen" :position="drawerPosition" title="Drawer">
-                <p class="text-sm text-gray-600">Slides from {{ drawerPosition }}.</p>
+                <p class="text-sm text-fg-muted">Slides from {{ drawerPosition }}.</p>
             </ShDrawer>
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">URL popups (ShPopups)</h2>
-            <p class="text-sm text-gray-600">Every popup below lives in the URL: refresh keeps it open, Back closes the top one, popups stack.</p>
+            <p class="text-sm text-fg-muted">Every popup below lives in the URL: refresh keeps it open, Back closes the top one, popups stack.</p>
             <div class="flex flex-wrap gap-3 text-sm">
-                <ShPopupLink comp="DemoUserCard" type="drawer" title="User 3" :props="{ id: 3 }" class="rounded-md bg-emerald-600 px-4 py-2 font-medium text-white">
+                <ShPopupLink comp="DemoUserCard" type="drawer" title="User 3" :props="{ id: 3 }" class="rounded-md bg-emerald-600 px-4 py-2 font-medium text-on-primary">
                     ShPopupLink (drawer)
                 </ShPopupLink>
-                <button class="rounded-md bg-blue-600 px-4 py-2 font-medium text-white" @click="popups.open('DemoEditUser', { title: 'Edit user 7', props: { id: 7 } })">
+                <button class="rounded-md bg-primary px-4 py-2 font-medium text-on-primary" @click="popups.open('DemoEditUser', { title: 'Edit user 7', props: { id: 7 } })">
                     usePopups().open() (lazy)
                 </button>
-                <a href="/?popup=modal&comp=ShQueryForm&title=New task&action=demo/tasks&fields=name,email,phone" class="rounded-md bg-gray-700 px-4 py-2 font-medium text-white">
+                <a href="/?popup=modal&comp=ShQueryForm&title=New task&action=demo/tasks&fields=name,email,phone" class="rounded-md bg-gray-700 px-4 py-2 font-medium text-on-primary">
                     Legacy shframework link
                 </a>
-                <a href="/users/12/peek" class="rounded-md bg-purple-600 px-4 py-2 font-medium text-white" @click.prevent="$router.push('/users/12/peek')">
+                <a href="/users/12/peek" class="rounded-md bg-purple-600 px-4 py-2 font-medium text-on-primary" @click.prevent="$router.push('/users/12/peek')">
                     Route meta popup
                 </a>
-                <ShPopupLink comp="NotRegistered" class="rounded-md border border-gray-300 px-4 py-2">Unregistered name</ShPopupLink>
+                <ShPopupLink comp="NotRegistered" class="rounded-md border border-line-strong px-4 py-2">Unregistered name</ShPopupLink>
             </div>
-            <p class="text-xs text-gray-500">Last closed: {{ lastClosed ?? '—' }}</p>
+            <p class="text-xs text-fg-subtle">Last closed: {{ lastClosed ?? '—' }}</p>
             <ShTable endpoint="demo/users" :columns="['id', 'name', 'email']" :actions="popupUserActions" :per-page="5" />
             <ShPopups />
         </section>
 
-        <section class="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+        <section class="space-y-4 rounded-xl border border-line bg-surface p-6">
             <h2 class="text-lg font-semibold">Actions</h2>
             <div class="flex gap-4">
                 <ShConfirmAction url="demo/danger" title="Delete record?" message="This cannot be undone">

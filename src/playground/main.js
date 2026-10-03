@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import { getApiClient } from '@iankibetsh/sh-core'
 import App from './App.vue'
-import { ShTailwind } from '../index.js'
+import { ShTailwind, tokenTheme } from '../index.js'
 import { localQuery } from '../table/localQuery.js'
 import { demoUsers } from './demoData.js'
 import DemoUserCard from './popups/DemoUserCard.vue'
@@ -28,6 +28,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(ShTailwind, {
     baseApiUrl: import.meta.env.VITE_APP_API_URL ?? 'http://localhost:8000/api/',
+    preset: tokenTheme,
     popups: {
         DemoUserCard,
         DemoEditUser: () => import('./popups/DemoEditUser.vue')

@@ -172,7 +172,7 @@ const dates = ref([])
 const setDate = (date, label) => {
     selectedDate.value = date
     activeLabel.value = label
-    rangeLabel.value = `<strong>${label}</strong> <span class="text-xs text-slate-400">(${formatHumanDate(date[0])} - ${formatHumanDate(date[1])})</span>`
+    rangeLabel.value = `<strong>${label}</strong> <span class="text-xs opacity-60">(${formatHumanDate(date[0])} - ${formatHumanDate(date[1])})</span>`
     
     const from = date[0]
     const to = date[1]
@@ -276,7 +276,7 @@ watch(() => props.modelValue, (newVal) => {
             const range = preset.getValue()
             selectedDate.value = range
             activeLabel.value = preset.label
-            rangeLabel.value = `<strong>${preset.label}</strong> <span class="text-xs text-slate-400">(${formatHumanDate(range[0])} - ${formatHumanDate(range[1])})</span>`
+            rangeLabel.value = `<strong>${preset.label}</strong> <span class="text-xs opacity-60">(${formatHumanDate(range[0])} - ${formatHumanDate(range[1])})</span>`
             return
         }
     }
@@ -286,7 +286,7 @@ watch(() => props.modelValue, (newVal) => {
         const toDate = new Date(newVal.to)
         selectedDate.value = [fromDate, toDate]
         activeLabel.value = 'Custom'
-        rangeLabel.value = `<strong>Custom</strong> <span class="text-xs text-slate-400">(${formatHumanDate(fromDate)} - ${formatHumanDate(toDate)})</span>`
+        rangeLabel.value = `<strong>Custom</strong> <span class="text-xs opacity-60">(${formatHumanDate(fromDate)} - ${formatHumanDate(toDate)})</span>`
         customFrom.value = newVal.from
         customTo.value = newVal.to
     }
@@ -300,13 +300,13 @@ watch(() => props.modelValue, (newVal) => {
             :class="t.range.trigger"
             @click="isOpen = !isOpen"
         >
-            <span class="flex items-center gap-2 text-slate-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <span class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
                 <span v-html="rangeLabel"></span>
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-4 text-slate-400 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-4 opacity-60 transition-transform duration-200" :class="{ 'rotate-180': isOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
         </button>
