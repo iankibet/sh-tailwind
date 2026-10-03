@@ -8,13 +8,13 @@ These guides ship with the package. In an app that has it installed, read them a
 
 - [Overview](README.md): what's in the package, one example per module, peer dependencies
 - [Getting started](documentation/getting-started.md): install, Tailwind `@source`, the `ShTailwind` plugin and its options (incl. `popups`, `theme`, `formComponents`)
-- [Forms](documentation/forms.md): `ShForm` / `ShDialogForm` / `ShFormSteps` — field schema, type inference, Laravel 422 errors, multi-step wizards, file uploads
+- [Forms](documentation/forms.md): `ShForm` / `ShFormSteps` — full field schema, type inference rules, option shapes, Laravel 422 errors, wizards, file uploads, custom inputs, `preSubmit`
 - [Inputs & masks](documentation/inputs.md): standalone inputs, money/pattern masks, PIN, phone, select, suggest, range
-- [Table](documentation/table.md): `ShTable` — columns, row/bulk actions (`handler`, `emit`, `link`, `popup`, `url`), pagination, offline IndexedDB cache
+- [Table](documentation/table.md): `ShTable` — all props (incl. `params` filters), columns, row/bulk actions (`handler`, `emit`, `link`, `popup`, `url`), slots/events, server contract, offline IndexedDB cache
 - [Tabs](documentation/tabs.md): `ShTabs` — slot, component and router modes
-- [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn`, `v-model:open`, stacking, `useDialog`
+- [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn` / `ShDialogForm`, `v-model:open`, stacking, `useDialog`
 - [Popups](documentation/popups.md): `ShPopups` / `ShPopupLink` / `usePopups` — URL-driven dialogs/drawers that survive refresh, close on Back and stack; route-meta popups; migration from shframework
-- [Actions](documentation/actions.md): `ShConfirmAction` (confirm → POST → toast) and `ShSilentAction`
+- [Actions](documentation/actions.md): `ShConfirmAction` (confirm → POST → toast) and `ShSilentAction`, props with defaults and events
 - [Theming](documentation/theming.md): the three override layers and the full export list
 
 ## Optional

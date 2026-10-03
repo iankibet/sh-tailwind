@@ -11,7 +11,8 @@ Set `mask` on a field (or use `MaskedInput` directly) to auto-format as the user
 | `mask` | Display | v-model receives |
 |---|---|---|
 | `'money'` | `1,234,567.89` | raw number `1234567.89` |
-| `'integer'` | `1,234,567` | `1234567` |
+| `'integer'` or `'number'` | `1,234,567` | `1234567` |
+| `'decimal'` | `1,234.56` | `1234.56` |
 | `{ type: 'money', prefix: 'KES ', decimals: 0 }` | `KES 50,000` | `50000` |
 | `'#### #### #### ####'` | `4111 1111 1111 1111` | formatted string |
 | `{ pattern: '#### ####', unmask: true }` | `1234 5678` | `12345678` (stripped) |
@@ -52,4 +53,7 @@ Props: `length` (default 4), `secret` (mask as dots), `isInvalid`, `disabled`. E
 | `PasswordInput` | show/hide eye toggle, `autocomplete` |
 | `DateInput` | `withTime` → `datetime-local`, `min`, `max` |
 | `NumberInput` | `min`, `max`, `step` |
+| `FileInput` | `accept`, `multiple`; `v-model` is a `File` (or `File[]` with `multiple`). Inside `ShForm` it switches the submit to multipart, see [File uploads](forms.md#file-uploads) |
 | `TextInput` / `TextAreaInput` / `EmailInput` | `rows` (textarea) |
+
+Every input also accepts `isInvalid` (error styling) and `disabled`.

@@ -56,16 +56,19 @@ const bulk = [{ label: 'Email selected', handler: (rows) => emailAll(rows) }]
 | Prop | Default | Notes |
 |---|---|---|
 | `endpoint` | — (required) | data endpoint |
+| `params` | `{}` | extra query params merged into every request (e.g. `{ status: 'active' }`). Changing it (deep-watched) resets to page 1 and reloads. Reserved keys below always win. Must be a plain object: to send a list, key it (`{ ids: [1, 3] }` → `ids[]=1&ids[]=3`) |
 | `columns` | — (required) | [column schema](#column--action-schema) |
 | `actions` | `[]` | row actions |
 | `multiActions` | `[]` | bulk actions over selected rows (adds checkboxes + a floating bar) |
-| `searchable` | `true` | debounced search box with an Exact toggle |
+| `searchable` | `true` | search box (500 ms debounce); an Exact toggle appears after 2+ characters |
 | `searchPlaceholder` | `'Search'` | |
-| `hasRange` | `false` | from/to date filters |
+| `hasRange` | `false` | date-range picker; sends `from`, `to`, `period` |
+| `selectedRange` | `null` | preset range |
+| `rangeStartYear` | `2021` | earliest year in the range picker |
 | `perPage` | ShConfig `tablePerPage` (10) | persisted per table |
 | `sortBy` / `sortMethod` | — / `'desc'` | initial sort |
 | `paginationStyle` | ShConfig `tablePaginationStyle` | `'pages'` \| `'loadMore'` |
-| `rowLink` | — | `'/users/{id}'` — whole row navigates |
+| `rowLink` | — | `'/users/{id}'` — whole row navigates (after `rowClick` fires) |
 | `cache` | `null` → ShConfig `enableTableCache` | offline cache (see below) |
 | `networkTimeout` | `10000` | ms before falling back to cache |
 | `reload` | — | change the value to force a reload |
@@ -79,14 +82,19 @@ const bulk = [{ label: 'Email selected', handler: (rows) => emailAll(rows) }]
 ```ts
 // column
 { name, label, format: 'money'|'number'|'date'|'datetime', sortable, component, show: () => bool, class }
-// action
-{ label, emit, handler: (row)=>{}, link: '/x/{id}', url: 'x/{id}', confirm: 'msg',
-  data, permission, show: (row)=>bool, class, failMessage }
+// action — one of handler / emit / link / popup / url, checked in that order
+{ label, handler: (row)=>{}, emit: 'name', link: '/x/{id}', popup: 'Name' | {...}, url: 'x/{id}',
+  confirm: 'msg', data, sendRowId: true, idKey: 'id', failMessage,   // url options
+  permission, show: (row)=>bool, class }
 // multi-action
 { label, handler: (rows)=>{}, permission, class }
 ```
 
-The table sends the classic server contract — `page`, `per_page`, `filter_value`, `order_by`, `order_method`, `from`, `to`, `exact`, `paginated` — and expects a Laravel paginator response, so existing backends work unchanged.
+**Columns:** `label` defaults to `startCase` of the last dot segment; `sortable` defaults to `true`, or `false` when a `component` is set. Plain and formatted cells render as **HTML** (`v-html`), so use a `component` or `#cell-` slot for user-generated content. A column named `actions` sets the header of the row-actions cell.
+
+**Actions:** `{placeholders}` in `link` / `url` / `popup` titles are filled from the row by dot path (`{id}`, `{owner.id}`). A `url` action POSTs `{ ...data, id: row.id }` (`sendRowId: false` to opt out, `idKey` to send another column as `id`); with `confirm` it asks first. Either way it toasts the server's `message` (or `failMessage`) and reloads. `popup` is covered in [Popups](popups.md).
+
+The table sends the classic server contract as query params — `page`, `per_page`, `filter_value`, `order_by`, `order_method`, `from`, `to`, `period`, `exact`, `paginated` (empty values omitted), plus your `params` — and expects a Laravel paginator response (`data`, `current_page`, `last_page`, `total`, …), so existing backends work unchanged.
 
 ## Offline-first cache
 

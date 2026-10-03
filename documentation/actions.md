@@ -16,11 +16,28 @@ Action buttons that wrap a request lifecycle — confirm → POST → toast, or 
 
 ## ShConfirmAction
 
-swal confirm → POST → toast.
+swal confirm → POST `data` to `url` → toast. Renders one clickable element (`tag`, default `button`; use `a` inside a table cell) whose default slot is the label, with a spinner while the request runs.
 
-**Props:** `url`, `data`, `title`, `message`, `loadingMessage`, `successMessage`, `failMessage`, `tag` (default `button`), `btnClass`.
-**Events:** `success` / `failed` / `canceled` (+ `actionSuccessful` / `actionFailed` / `actionCanceled` aliases).
+| Prop | Default | |
+|---|---|---|
+| `url` | — (required) | endpoint |
+| `data` | — | POST body |
+| `title` / `message` | — | confirm dialog heading / body |
+| `loadingMessage` | `'Processing...'` | |
+| `successMessage` | `'Action Successful'` | the server's `message`, if any, is shown instead |
+| `failMessage` | `'Action failed'` | |
+| `tag` | `'button'` | |
+| `btnClass` | theme `buttons.link` | |
+
+**Events:** `success(response)`, `failed(reason)`, `canceled()`, plus the aliases `actionSuccessful` / `actionFailed` / `actionCanceled`.
 
 ## ShSilentAction
 
-Direct request, no confirm. Same surface as `ShConfirmAction` plus `method` (`GET|POST|PUT|DELETE`) and `disableSuccessMessage`.
+The request runs straight away, with no confirm. Same props as `ShConfirmAction` **minus** `title` / `message`, **plus**:
+
+- `method`: `GET` | `POST` (default) | `PUT` | `DELETE`
+- `disableSuccessMessage`: suppress the success toast
+
+**Events:** `success(response)`, `failed(reason)` (+ `actionSuccessful` / `actionFailed`).
+
+Inside `ShTable`, prefer a `url` row action (with `confirm` for the confirm flow) over embedding these components, see [Table](table.md#action-handlers).

@@ -31,13 +31,18 @@ Need the overlay in the URL (refresh-safe, linkable, closes on Back, stackable)?
 
 ## ShDrawer
 
-Same as `ShDialog` plus `position` (`start|end|top|bottom`, default `end`); same size/static/events/slots.
+Same as `ShDialog` plus `position` (`start|end|top|bottom`, default `end`). `size` is the width for `start`/`end` and the height for `top`/`bottom`. Same `static` / `hideClose` / events / `show()` / `close()`, but **no `#footer` slot**: put actions in the body.
 
 ## Trigger + form helpers
 
 **ShDialogBtn / ShDrawerBtn** render a trigger button + the overlay; props add `btnClass` and a `#trigger` slot.
 
-**ShDialogForm** = trigger + dialog + [`ShForm`](forms.md) (all ShForm props pass through), re-keys the form on `currentData`, auto-closes ~600ms after success unless `retain-dialog`.
+**ShDialogForm** = trigger + dialog + [`ShForm`](forms.md). It re-keys the form when `currentData` changes and auto-closes ~600 ms after success unless `retain-dialog`.
+
+- Dialog props: `title`, `size`, `static`, `retainDialog`, `btnClass`, `dialogClasses`.
+- Form props passed through: `action`, `method`, `fields`, `currentData`, `steps`, `submitLabel`, `successMessage`, `retainData`, `preSubmit`, `hiddenId`, `classes`.
+- **`v-model:open`** (optional): pass it to control opening yourself (e.g. edit from a table row). The built-in trigger button is then hidden.
+- **Events:** `success`, `error`, `fieldChanged`, `opened`, `closed`, `update:open`.
 
 ## Behaviour
 

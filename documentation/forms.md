@@ -45,30 +45,91 @@
 
 ## Field schema
 
-```ts
-{
-  name,                 // required (string shorthand → { name })
-  type,                 // omitted → inferred (see below)
-  label,                // default startCase(name); false hides it
-  placeholder, helper,  // helper renders as html under the field
-  required,             // shows a * marker (server still validates)
-  value,                // initial value (else from currentData[name])
-  options,              // array | { url }  → select/suggest data
-  multiple, allowCustom,// suggest behaviour
-  optionTemplate,       // component to render each suggest option
-  min, max, step,       // number / date
-  rows,                 // textarea
-  withTime,             // date → datetime-local
-  mask,                 // input mask (see Inputs & masks)
-  digits, secret,       // pin: box count / dot-mask
-  countryCode, detectCountry, // phone
-  component,            // use a custom component for this field
-  props,                // extra props v-bound onto the input
-  class                 // extra classes appended to the input
-}
+A field is a string (`'email'` → `{ name: 'email' }`) or an object:
+
+| Key | Applies to | Notes |
+|---|---|---|
+| `name` | all | **required** |
+| `type` | all | omitted → [inferred](#type-inference). Explicit: `text` `textarea` `email` `password` `pin` `number` `date` `select` `suggest` `phone` `file` `hidden` |
+| `label` | all | default `startCase(name)`; `false` hides it |
+| `placeholder` | text-like | |
+| `helper` | all | rendered **as HTML** under the field |
+| `required` | all | shows a `*`; cosmetic, the server still validates |
+| `value` | all | initial value; else `currentData[name]`, else `null` |
+| `disabled` | all | disable just this field |
+| `id`, `autocomplete` | all | forwarded to the input (`id` defaults to `name`) for browser autofill |
+| `class` | all | extra classes appended to the input element |
+| `props` | all | object v-bound onto the input component (wins over the keys above) |
+| `component` | all | render this field with a [custom component](#custom-inputs) |
+| `options` | select / suggest | an array ([shapes](#option-shapes)) **or** `{ url: 'endpoint' }` |
+| `multiple` | select / suggest / file | multi-value; on an options field it switches to `suggest` |
+| `allowCustom` | suggest | accept free text not in the list; switches to `suggest` |
+| `optionTemplate` | suggest | component rendering each option row |
+| `rows` | textarea | |
+| `min` `max` `step` | number | |
+| `min` `max` `withTime` | date | ISO bounds; `withTime` renders `datetime-local` |
+| `countryCode` `detectCountry` | phone | default country `'KE'`; `detectCountry` opts in to a remote lookup |
+| `digits` (alias `length`) `secret` | pin | box count (default 4); `secret` masks digits as dots |
+| `accept` | file | e.g. `'image/*'` |
+| `mask` | text-like | string, object or function, see [Inputs & masks](inputs.md#input-masks) |
+
+### Type inference
+
+When `type` is omitted, the first matching rule wins:
+
+1. `component` set → custom component
+2. `options` set → `suggest` if `multiple` or `allowCustom`, else `select`
+3. Exact name: `password`, `password_confirmation` → `password` · `pin` → `pin` · `email` → `email` · `phone`, `phone_number` → `phone` · `message`, `description`, `comments`, `notes` → `textarea` · `age` → `number` · `date` → `date`
+4. Suffix: `*_email` → `email` · `*_phone` → `phone` · `*_at`, `*_date`, `*_on` → `date`
+5. Otherwise `text`
+
+A field with a `mask` renders through `MaskedInput` whatever its type (except `pin`). Name fields after your columns and you rarely need `type`.
+
+### Option shapes
+
+`select` and `suggest` accept loose shapes:
+
+```js
+options: ['draft', 'live']                                   // value = label = the string
+options: [{ id: 3, name: 'Editorial' }]                      // value = id, label = name
+options: [{ value: 'draft', label: 'Draft' }]                // value / key / name, label / name / option
+options: { url: 'departments/options' }                      // GET with { all: 1 }; array or { data: [...] }
 ```
 
-**Type inference** (when `type` is omitted): exact names (`password`, `email`, `phone`, `pin`, `description`, …), suffixes (`*_email`, `*_phone`, `*_at`/`*_date`/`*_on`), and `options` present → `select` (or `suggest` with `multiple`/`allowCustom`).
+## File uploads
+
+A `type: 'file'` field (`v-model` is a `File`, or `File[]` with `multiple`) makes `ShForm` send the whole payload as `multipart/form-data`: arrays as `key[]`, nested objects JSON-encoded, and `PUT`/`PATCH` tunnelled as `POST` with `_method`. Laravel reads it with `request()->file('avatar')`.
+
+```js
+{ name: 'avatar', type: 'file', accept: 'image/*', required: true }
+```
+
+## Custom inputs
+
+Per field, or globally per type through the plugin:
+
+```js
+{ name: 'colour', component: ColourPicker, props: { swatches } }
+
+app.use(ShTailwind, { formComponents: { date: MyDatePicker } })   // every date field
+```
+
+A custom input takes `modelValue`, emits `update:modelValue`, and may emit `clearValidationErrors` when the user starts correcting an error. It also receives `isInvalid` and the field's props.
+
+## `preSubmit`
+
+```vue
+<ShForm
+    action="orders"
+    :fields="fields"
+    :pre-submit="(data) => {
+        if (!data.terms) { shRepo.showToast('Accept the terms', 'error'); return false }  // abort
+        return { ...data, source: 'web' }                                                // replace payload
+    }"
+/>
+```
+
+Return `false` to abort, an object to replace the payload; anything else submits unchanged. It may be `async`.
 
 ## Validation
 

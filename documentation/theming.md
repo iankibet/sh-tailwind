@@ -38,7 +38,7 @@ ShTable, ShTablePagination, useTableData, localQuery, shTableCache, clearTableCa
 ShConfirmAction, ShSilentAction, ShSpinner
 // inputs
 TextInput, TextAreaInput, EmailInput, PasswordInput, PinInput, MaskedInput,
-NumberInput, DateInput, SelectInput, PhoneInput, ShSuggest
+NumberInput, DateInput, SelectInput, PhoneInput, FileInput, ShSuggest
 // utilities & data
 applyMask, maskMoney, maskPattern, countries
 ```

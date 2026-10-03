@@ -1,6 +1,8 @@
 <script setup>
 const props = defineProps({
-    modelValue: [Object, Array, File, FileList],
+    // File | File[] | null; untyped so SSR / Node imports don't touch the
+    // browser-only File / FileList globals at module load
+    modelValue: null,
     accept: String,
     multiple: Boolean,
     isInvalid: Boolean,

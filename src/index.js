@@ -51,6 +51,7 @@ export { default as NumberInput } from './components/form/inputs/NumberInput.vue
 export { default as DateInput } from './components/form/inputs/DateInput.vue'
 export { default as SelectInput } from './components/form/inputs/SelectInput.vue'
 export { default as PhoneInput } from './components/form/inputs/PhoneInput.vue'
+export { default as FileInput } from './components/form/inputs/FileInput.vue'
 export { default as ShSuggest } from './components/form/inputs/ShSuggest.vue'
 export { default as ShRange } from './components/form/inputs/ShRange.vue'
 
