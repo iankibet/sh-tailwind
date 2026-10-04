@@ -105,3 +105,9 @@ NumberInput, DateInput, SelectInput, PhoneInput, FileInput, ShSuggest
 // utilities & data
 applyMask, maskMoney, maskPattern, countries
 ```
+
+From `@iankibetsh/sh-tailwind/vite` (build-time, see [Routing](routing.md)):
+
+```js
+shPages, pageMeta, routeName, createPageDefaults, liftPageMeta
+```

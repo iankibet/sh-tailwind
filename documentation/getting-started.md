@@ -10,7 +10,7 @@ Install, Tailwind setup, and the plugin that wires everything together.
 npm i @iankibetsh/sh-tailwind @iankibetsh/sh-core pinia
 ```
 
-Peers: `@iankibetsh/sh-core@^1`, `vue@^3.5`, `pinia@^3`, and `vue-router@^4||^5` (optional — only needed for `ShTable` row links / `link:` actions, `ShTabs` router mode and URL-driven [popups](popups.md)).
+Peers: `@iankibetsh/sh-core@^1`, `vue@^3.5`, `pinia@^3`, and `vue-router@^4||^5` (optional — only needed for `ShTable` row links / `link:` actions, `ShTabs` router mode and URL-driven [popups](popups.md); the [`shPages()` routing plugin](routing.md) needs vue-router 5).
 
 ## Tailwind CSS setup
 
@@ -55,6 +55,7 @@ app.use(ShTailwind, {
 
 ## Next steps
 
+- [Routing](routing.md) — `shPages()`: routes from your pages folder
 - [Forms](forms.md) — schema-driven `ShForm`
 - [Inputs & masks](inputs.md) — standalone inputs, masks, PIN
 - [Table](table.md) — server-driven `ShTable` with offline cache

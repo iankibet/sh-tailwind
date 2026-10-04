@@ -1,6 +1,6 @@
 {
   "name": "@iankibetsh/sh-tailwind",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "description": "Vue 3 + Tailwind CSS v4 component library for Laravel backends, built on @iankibetsh/sh-core. Forms, tables, tabs, dialogs, drawers and action components.",
   "type": "module",
   "main": "./dist/sh-tailwind.cjs.js",
@@ -10,6 +10,7 @@
       "import": "./dist/sh-tailwind.es.js",
       "require": "./dist/sh-tailwind.cjs.js"
     },
+    "./vite": "./src/vite/index.js",
     "./tokens.css": "./src/theme/tokens.css"
   },
   "files": [
@@ -23,6 +24,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "node --test",
     "prepublishOnly": "vite build"
   },
   "keywords": [
@@ -61,7 +63,7 @@
     "tailwindcss": "^4",
     "vite": "^8",
     "vue": "^3.5",
-    "vue-router": "^4.6.4"
+    "vue-router": "^5.3.1"
   },
   "publishConfig": {
     "access": "public"

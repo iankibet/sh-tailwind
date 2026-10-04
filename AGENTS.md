@@ -12,6 +12,8 @@ library in an app, read [`llms.txt`](llms.txt) and `documentation/` instead.
 | `src/components/{form,table,overlay,navigation,actions}/` | components |
 | `src/popups/` | URL popup manager, URL codec, prop coercion |
 | `src/theme/` | `defaultTheme`, injection keys, `useTheme` |
+| `src/vite/` | `shPages()` Vite plugin (`@iankibetsh/sh-tailwind/vite`): runs in Node at build time, shipped as source, never imported from `src/index.js` |
+| `tests/` | `node --test` suite for `src/vite/` (fixture pages in `tests/fixtures/`) |
 | `src/playground/` | dev-only demo app (not shipped) |
 | `documentation/*.md` | user guides — **shipped in the npm package** |
 | `llms.txt` | agent index of the guides — **shipped in the npm package** |
@@ -27,7 +29,8 @@ library in an app, read [`llms.txt`](llms.txt) and `documentation/` instead.
    (`0.x` → `0.(x+1).0`); fixes bump the patch.
 3. **vue-router is optional.** Get it via
    `getCurrentInstance()?.appContext.config.globalProperties.$router` (or the app in
-   the plugin), never `import … from 'vue-router'` in library code.
+   the plugin), never `import … from 'vue-router'` in library code. The one exception is
+   `src/vite/`, which wraps `vue-router/vite` and so needs vue-router 5.
 4. **Tailwind classes must be whole literals** (no string-built class names), so
    consumers' `@source` scanning picks them up. The default theme is light-only.
 5. No Bootstrap, no Bootstrap JS.
@@ -38,6 +41,7 @@ library in an app, read [`llms.txt`](llms.txt) and `documentation/` instead.
 npm install
 npm run dev     # playground at http://localhost:5173 (mocks demo/* endpoints)
 npm run build   # library build into dist/ — must pass before committing
+npm test        # node --test: the routing plugin against tests/fixtures/pages
 ```
 
 Add a playground demo for new UI behaviour and click through it before committing.

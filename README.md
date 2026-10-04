@@ -15,6 +15,7 @@ Each module has its own guide under [`documentation/`](documentation/):
 | [Tabs](documentation/tabs.md) | `ShTabs` — slot / component / router modes |
 | [Overlays](documentation/overlays.md) | `ShDialog` / `ShDrawer` and trigger/form helpers |
 | [Popups](documentation/popups.md) | `ShPopups` — URL-driven, stackable dialogs/drawers (refresh, links, Back) |
+| [Routing](documentation/routing.md) | `shPages()` — Vite plugin: pages folder to routes, group folders, default meta |
 | [Actions](documentation/actions.md) | `ShConfirmAction` / `ShSilentAction` |
 | [Theming](documentation/theming.md) | Token preset (brand colour + dark mode), override layers, full export list |
 
@@ -26,7 +27,7 @@ These guides ship in the npm package, so they always match the installed version
 npm i @iankibetsh/sh-tailwind @iankibetsh/sh-core pinia
 ```
 
-Peers: `@iankibetsh/sh-core@^1`, `vue@^3.5`, `pinia@^3`, and `vue-router@^4||^5` (optional). Register the plugin, then point Tailwind at the package — full steps in [Getting started](documentation/getting-started.md).
+Peers: `@iankibetsh/sh-core@^1`, `vue@^3.5`, `pinia@^3`, and `vue-router@^4||^5` (optional; [file-based routing](documentation/routing.md) needs 5). Register the plugin, then point Tailwind at the package — full steps in [Getting started](documentation/getting-started.md).
 
 ```js
 import { ShTailwind } from '@iankibetsh/sh-tailwind'

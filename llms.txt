@@ -1,6 +1,6 @@
 # @iankibetsh/sh-tailwind
 
-> Vue 3 + Tailwind CSS v4 component library for Laravel (Streamline) backends, built on @iankibetsh/sh-core. Schema-driven forms, server-driven tables, dialogs/drawers, URL-driven popups, tabs and one-click action buttons. Import everything from `@iankibetsh/sh-tailwind`.
+> Vue 3 + Tailwind CSS v4 component library for Laravel (Streamline) backends, built on @iankibetsh/sh-core. Schema-driven forms, server-driven tables, dialogs/drawers, URL-driven popups, tabs and one-click action buttons. Import everything from `@iankibetsh/sh-tailwind`; the file-based routing Vite plugin is at `@iankibetsh/sh-tailwind/vite`.
 
 These guides ship with the package. In an app that has it installed, read them at `node_modules/@iankibetsh/sh-tailwind/documentation/`; they match the installed version exactly. Paths below are relative to this file.
 
@@ -14,6 +14,7 @@ These guides ship with the package. In an app that has it installed, read them a
 - [Tabs](documentation/tabs.md): `ShTabs` — slot, component and router modes
 - [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn` / `ShDialogForm`, `v-model:open`, stacking, `useDialog`
 - [Popups](documentation/popups.md): `ShPopups` / `ShPopupLink` / `usePopups` — URL-driven dialogs/drawers that survive refresh, close on Back and stack; route-meta popups; migration from shframework
+- [Routing](documentation/routing.md): `shPages()` Vite plugin (`@iankibetsh/sh-tailwind/vite`, needs vue-router 5+) — pages folder to routes: `index.vue` / `[id].vue`, `(admin)` / `(guest)` group folders, default `auth` / `title` / `breadcrumbs` meta, `definePage()` overrides (shorthand `definePage({ title })`), static or lazy pages
 - [Actions](documentation/actions.md): `ShConfirmAction` (confirm → POST → toast) and `ShSilentAction`, props with defaults and events
 - [Theming](documentation/theming.md): presets and override layers, design tokens (`tokens.css` + `tokenTheme`: one-variable brand colour, token utilities like `bg-surface` / `text-fg`), dark mode with `useColorMode()`, full export list
 
