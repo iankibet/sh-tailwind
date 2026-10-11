@@ -76,6 +76,8 @@ To avoid a light flash before Vue boots, put this in your HTML `<head>`:
 </script>
 ```
 
+**Alerts and toasts.** `tokens.css` also points sweetalert2 (sh-core's alerts, confirms and toasts) at the tokens, so they switch with the colour mode. To restyle them, set `--swal2-*` variables on `.swal2-container`, not `:root`: sweetalert2 injects its own `:root` defaults at runtime, after your CSS, so a `:root` override loses.
+
 ## Every value is a full utility string
 
 Theme values are **complete** Tailwind utility strings, never interpolated fragments — so consumers' `@source` extraction always finds the classes. When overriding, write the whole string for that key (e.g. an active tab), not a partial.

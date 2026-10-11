@@ -72,3 +72,28 @@
     --color-secondary-strong: color-mix(in oklab, var(--sh-secondary) 72%, var(--sh-fg));
     --color-on-secondary: var(--sh-on-secondary);
 }
+
+/*
+ * sweetalert2 (sh-core alerts, confirms and toasts) on the same tokens, so it
+ * follows the colour mode. Set on the container, not :root: sweetalert2 injects
+ * its own :root defaults at runtime, after your CSS, and would win the tie.
+ */
+.swal2-container {
+    --swal2-background: var(--sh-surface);
+    --swal2-color: var(--sh-fg-muted);
+    --swal2-backdrop: rgb(0 0 0 / 50%);
+    --swal2-close-button-color: var(--sh-fg-subtle);
+    --swal2-input-border: 1px solid var(--sh-line-strong);
+    --swal2-validation-message-background: var(--sh-muted);
+    --swal2-validation-message-color: var(--sh-fg-muted);
+    --swal2-footer-border-color: var(--sh-line);
+}
+
+.dark .swal2-container {
+    --swal2-backdrop: rgb(0 0 0 / 70%);
+}
+
+/* .swal2-modal = alerts and confirms only; toasts keep their own title colour */
+.swal2-modal .swal2-title {
+    color: var(--sh-fg);
+}
