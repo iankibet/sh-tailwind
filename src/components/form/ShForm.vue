@@ -212,12 +212,25 @@ const submitForm = async () => {
         currentStep.value++
         return
     }
+    // One submit at a time. The button locks before preSubmit, which may be
+    // slow (e.g. fetching a captcha token), so a second tap can't resend.
+    if (submitting.value) {
+        return
+    }
+    submitting.value = true
     Object.keys(errors).forEach(key => delete errors[key])
     let data = collectData()
 
     if (props.preSubmit) {
-        const result = await props.preSubmit(data)
+        let result
+        try {
+            result = await props.preSubmit(data)
+        } catch (error) {
+            submitting.value = false
+            throw error
+        }
         if (result === false) {
+            submitting.value = false
             return
         }
         if (result && typeof result === 'object') {
@@ -247,7 +260,6 @@ const submitForm = async () => {
         payload.append('_method', method.toUpperCase())
     }
 
-    submitting.value = true
     try {
         const res = await send(props.action, payload)
         if (props.successMessage) {
