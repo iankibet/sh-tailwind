@@ -9,7 +9,9 @@ const props = defineProps({
     title: String,
     position: { type: String, default: 'end' }, // start | end | top | bottom
     size: { type: String, default: 'md' },
-    static: Boolean,
+    // true: never close on backdrop/Escape. false: always can.
+    // unset: sticky only while the drawer contains a ShForm.
+    static: { type: Boolean, default: undefined },
     hideClose: Boolean,
     classes: Object
 })
@@ -72,6 +74,7 @@ watch(dialog.isOpen, (value) => {
 
 provide(SH_DIALOG_CONTEXT, {
     close: () => close('context'),
+    registerForm: dialog.registerForm,
     requestClose: (reason) => close(reason)
 })
 
@@ -89,7 +92,7 @@ defineExpose({ show, close })
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-show="visible" :class="t.backdrop" @click="dialog.onBackdrop" />
+                <div v-show="visible" :class="t.backdrop" @pointerdown="dialog.onBackdropDown" @click="dialog.onBackdrop" />
             </Transition>
             <Transition
                 enter-active-class="transition-transform duration-250 ease-out"

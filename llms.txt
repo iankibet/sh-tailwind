@@ -12,7 +12,7 @@ These guides ship with the package. In an app that has it installed, read them a
 - [Inputs & masks](documentation/inputs.md): standalone inputs, money/pattern masks, PIN, phone, select, suggest, range
 - [Table](documentation/table.md): `ShTable` — all props (incl. `params` filters), columns, row/bulk actions (`handler`, `emit`, `link`, `popup`, `url`), slots/events, server contract, offline IndexedDB cache
 - [Tabs](documentation/tabs.md): `ShTabs` — slot, component and router modes
-- [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn` / `ShDialogForm`, `v-model:open`, stacking, `useDialog`
+- [Overlays](documentation/overlays.md): `ShDialog` / `ShDrawer` / `ShDialogBtn` / `ShDrawerBtn` / `ShDialogForm`, `v-model:open`, stacking, closing rules (form overlays are sticky by default; `static` overrides), `useDialog`
 - [Popups](documentation/popups.md): `ShPopups` / `ShPopupLink` / `usePopups` — URL-driven dialogs/drawers that survive refresh, close on Back and stack; route-meta popups; migration from shframework
 - [Routing](documentation/routing.md): `shPages()` Vite plugin (`@iankibetsh/sh-tailwind/vite`, needs vue-router 5+) — pages folder to routes: `index.vue` / `[id].vue`, `(admin)` / `(guest)` group folders, default `auth` / `title` / `breadcrumbs` meta, `definePage()` overrides (shorthand `definePage({ title })`), static or lazy pages
 - [Actions](documentation/actions.md): `ShConfirmAction` (confirm → POST → toast) and `ShSilentAction`, props with defaults and events

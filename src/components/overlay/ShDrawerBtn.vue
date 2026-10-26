@@ -7,7 +7,7 @@ defineProps({
     title: String,
     position: { type: String, default: 'end' },
     size: { type: String, default: 'md' },
-    static: Boolean,
+    static: { type: Boolean, default: undefined }, // unset = sticky while it holds a form
     hideClose: Boolean,
     btnClass: String,
     classes: Object

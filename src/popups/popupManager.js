@@ -62,7 +62,7 @@ export function createPopupManager (app, popups = {}) {
             title: typeof meta.title === 'function' ? meta.title(route) : meta.title,
             size: meta.size,
             side: normalizeSide(meta.side ?? meta.position),
-            static: !!meta.static,
+            static: meta.static === undefined ? undefined : !!meta.static,
             params: { ...route.params }
         }
     }
@@ -276,7 +276,7 @@ export function createPopupManager (app, popups = {}) {
                 title: rest.title,
                 size: rest.size,
                 side: normalizeSide(rest.side),
-                static: !!rest.static,
+                static: rest.static === undefined ? undefined : !!rest.static,
                 params: { ...(rest.props ?? {}), ...(rest.title ? { title: rest.title } : {}) }
             }
             onClose && callbacks.set(layer.key, onClose)

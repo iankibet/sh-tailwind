@@ -8,7 +8,9 @@ const props = defineProps({
     open: Boolean,
     title: String,
     size: { type: String, default: 'md' }, // sm | md | lg | xl | full
-    static: Boolean,
+    // true: never close on backdrop/Escape. false: always can.
+    // unset: sticky only while the dialog contains a ShForm.
+    static: { type: Boolean, default: undefined },
     hideClose: Boolean,
     // keep the dialog open when a nested ShForm submits successfully
     retainOnSuccess: Boolean,
@@ -43,8 +45,11 @@ const close = (reason) => {
     dialog.close(reason)
 }
 
-const onBackdrop = () => {
-    if (props.static) {
+const onBackdrop = (e) => {
+    if (!dialog.isBackdropClick(e)) {
+        return
+    }
+    if (dialog.sticky.value) {
         // Bootstrap-style attention pulse
         pulsing.value = true
         setTimeout(() => { pulsing.value = false }, 150)
@@ -72,6 +77,7 @@ watch(dialog.isOpen, (value) => {
 // Bootstrap `.closest('.modal-dialog')` hack)
 provide(SH_DIALOG_CONTEXT, {
     close: () => close('context'),
+    registerForm: dialog.registerForm,
     requestClose: (reason) => {
         if (reason === 'success') {
             if (props.retainOnSuccess) {
@@ -99,7 +105,7 @@ defineExpose({ show, close })
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-show="visible" :class="t.backdrop" @click="onBackdrop" />
+                <div v-show="visible" :class="t.backdrop" @pointerdown="dialog.onBackdropDown" @click="onBackdrop" />
             </Transition>
             <Transition
                 enter-active-class="transition duration-200 ease-out"
@@ -111,7 +117,7 @@ defineExpose({ show, close })
                 @after-enter="panel?.focus(); emit('opened')"
                 @after-leave="rendered = false; emit('closed')"
             >
-                <div v-show="visible" :class="t.wrapper" @click.self="onBackdrop">
+                <div v-show="visible" :class="t.wrapper" @pointerdown="dialog.onBackdropDown" @click="onBackdrop">
                     <div
                         ref="panel"
                         tabindex="-1"

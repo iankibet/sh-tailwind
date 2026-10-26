@@ -11,7 +11,7 @@ const props = defineProps({
     title: String,
     size: String,
     side: String,
-    static: Boolean,
+    static: { type: Boolean, default: undefined }, // unset = sticky while it holds a form
     props: { type: Object, default: () => ({}) }
 })
 const emit = defineEmits(['closed'])

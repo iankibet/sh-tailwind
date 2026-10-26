@@ -25,7 +25,7 @@ Need the overlay in the URL (refresh-safe, linkable, closes on Back, stackable)?
 
 ## ShDialog
 
-**Props:** `open` (v-model), `title` (or `#title` slot), `size` (`sm|md|lg|xl|full`, default `md`), `static` (disables Escape/backdrop close — backdrop click pulses the panel), `hideClose`, `retainOnSuccess`, `classes`.
+**Props:** `open` (v-model), `title` (or `#title` slot), `size` (`sm|md|lg|xl|full`, default `md`), `static` (disables Escape/backdrop close — backdrop click pulses the panel; see [Closing](#closing) for the default), `hideClose`, `retainOnSuccess`, `classes`.
 **Events:** `update:open`, `opened`, `closed`. **Exposes:** `show()`, `close()`.
 **Slots:** default (`{ close }`), `#title`, `#footer="{ close }"`.
 
@@ -44,6 +44,15 @@ Same as `ShDialog` plus `position` (`start|end|top|bottom`, default `end`). `siz
 - **`v-model:open`** (optional): pass it to control opening yourself (e.g. edit from a table row). The built-in trigger button is then hidden.
 - **Events:** `success`, `error`, `fieldChanged`, `opened`, `closed`, `update:open`.
 
+## Closing
+
+A dialog or drawer that contains a `ShForm` is **sticky by default**: clicking outside it or pressing Escape does nothing (the panel pulses), so a stray click or a password-manager overlay can't throw away what was typed. The X button, Cancel, and auto-close on success still work. Overlays without a form still close on backdrop click and Escape.
+
+- `static` (or `:static="true"`) makes any overlay sticky, form or not.
+- `:static="false"` makes a form overlay close on backdrop/Escape again.
+
+This applies to `ShDialog`, `ShDrawer`, `ShDialogBtn`, `ShDrawerBtn`, `ShDialogForm` and [URL popups](popups.md). A click only counts as "outside" when the press also starts outside, so selecting text in an input and releasing over the backdrop never closes anything. Escape inside an open phone-country list or suggest dropdown closes only that dropdown.
+
 ## Behaviour
 
-Dialogs stack — Escape closes the topmost first; body scroll locks while open; focus returns to the trigger on close. The low-level `useDialog({ isStatic, onOpen, onClose })` → `{ isOpen, zIndex, show, close, onBackdrop }` is exported if you're building your own overlay.
+Dialogs stack — Escape closes the topmost first; body scroll locks while open; focus returns to the trigger on close. The low-level `useDialog({ isStatic, onOpen, onClose })` → `{ isOpen, zIndex, sticky, show, close, onBackdrop, onBackdropDown, registerForm }` (`isStatic()` returning `undefined` means "sticky while a form is registered"; bind both `@pointerdown="onBackdropDown"` and `@click="onBackdrop"` on your backdrop) is exported if you're building your own overlay.

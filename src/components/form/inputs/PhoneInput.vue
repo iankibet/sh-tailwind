@@ -84,6 +84,8 @@ const onSearchKeydown = (e) => {
             pickCountry(country)
         }
     } else if (e.key === 'Escape') {
+        // close the country list only, not the dialog around the form
+        e.stopPropagation()
         open.value = false
     }
 }

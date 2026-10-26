@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, reactive, ref, watch } from 'vue'
+import { computed, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { shApis, shRepo } from '@iankibetsh/sh-core'
 import { useTheme } from '../../theme/useTheme.js'
 import { SH_TW_COMPONENTS, SH_DIALOG_CONTEXT } from '../../theme/keys.js'
@@ -45,6 +45,9 @@ const t = useTheme('form', computed(() => props.classes))
 const inputsTheme = useTheme('inputs')
 const injectedComponents = inject(SH_TW_COMPONENTS, {})
 const dialogContext = inject(SH_DIALOG_CONTEXT, null)
+// a form makes its host dialog/drawer sticky (unless it sets `static`)
+const unregisterForm = dialogContext?.registerForm?.()
+onBeforeUnmount(() => unregisterForm?.())
 
 const builtins = {
     text: TextInput,

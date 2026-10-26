@@ -1,6 +1,6 @@
 <script setup>
 // Internal: renders one popup layer's component inside its ShDialog/ShDrawer.
-import { computed, provide, ref, shallowRef } from 'vue'
+import { computed, inject, provide, ref, shallowRef } from 'vue'
 import ShSpinner from '../actions/ShSpinner.vue'
 import { usePopups } from '../../popups/usePopups.js'
 import { pickProps } from '../../popups/popupProps.js'
@@ -35,7 +35,9 @@ const bound = computed(() => (component.value ? pickProps(component.value, props
 // remount the content (not the shell) when the props it receives change
 const contentKey = computed(() => JSON.stringify(bound.value))
 
-const context = popups.contextFor(props.entry)
+// the shell's context: forms still register with it so it turns sticky
+const shell = inject(SH_DIALOG_CONTEXT, null)
+const context = { ...popups.contextFor(props.entry), registerForm: shell?.registerForm }
 provide(SH_DIALOG_CONTEXT, context)
 provide(SH_POPUP_CONTEXT, {
     close: context.close,

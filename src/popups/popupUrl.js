@@ -71,7 +71,7 @@ export function parseQueryLayers (query = {}) {
             title: raw.title ?? undefined,
             size: raw.size ?? undefined,
             side: normalizeSide(raw.side ?? raw.position),
-            static: flag(raw, 'static'),
+            static: 'static' in raw ? flag(raw, 'static') : undefined,
             params
         })
     }
@@ -87,7 +87,7 @@ export function buildLayerQuery (index, name, { type, title, size, side, static:
     if (title) query[`${p}title`] = title
     if (size) query[`${p}size`] = size
     if (side) query[`${p}side`] = side
-    if (isStatic) query[`${p}static`] = '1'
+    if (isStatic !== undefined) query[`${p}static`] = isStatic ? '1' : '0'
     for (const [key, value] of Object.entries(props)) {
         if (value === undefined || value === null) {
             continue

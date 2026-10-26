@@ -116,6 +116,10 @@ const onKeydown = (e) => {
             submitCustom()
         }
     } else if (e.key === 'Escape') {
+        if (open.value) {
+            // close the suggestions only, not the dialog around the form
+            e.stopPropagation()
+        }
         open.value = false
     } else if (e.key === 'Backspace' && !search.value && selected.value.length) {
         remove(selected.value[selected.value.length - 1])

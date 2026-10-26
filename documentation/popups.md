@@ -44,7 +44,7 @@ popups.open('EditTask', {
     title: 'Edit task',
     size: 'lg',                // sm | md | lg | xl | full
     side: 'end',               // drawers: start | end | top | bottom (left/right accepted)
-    static: false,             // true: no Escape / backdrop close
+    static: true,              // omit: sticky only if it holds a ShForm; true/false forces it
     props: { id: 5 },          // strings, numbers, booleans; they go in the URL
     onClose: ({ reason, result }) => { /* ... */ }
 })
@@ -130,7 +130,7 @@ A child route can render as a popup over its parent page:
     children: [{
         path: ':id/view',
         component: () => import('./ViewTask.vue'),
-        meta: { popup: 'drawer', title: 'Task', size: 'lg', side: 'end', static: false }
+        meta: { popup: 'drawer', title: 'Task', size: 'lg', side: 'end' }
     }]
 }
 ```
