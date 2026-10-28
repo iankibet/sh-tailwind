@@ -29,11 +29,11 @@ Pattern tokens: `#` digit, `A` letter, `N`/`*` alphanumeric; any other character
 
 ## PIN input
 
-`type: 'pin'` (or the standalone `PinInput`) renders segmented digit boxes — auto-advance, backspace-to-previous, arrow nav, and paste-distributes-a-code.
+`type: 'pin'` (or the standalone `PinInput`) renders segmented digit boxes that span the field width — auto-advance, backspace-to-previous, arrow nav, and paste-distributes-a-code. A whole code pasted or autofilled into any box (iOS/Android "from Messages/Mail" suggestions) fills from the first box; only the first box carries `autocomplete="one-time-code"` so the code is offered once. `secret` shows bullets on a plain text box, so password managers stay out of the way.
 
 ```vue
 <!-- in a form -->
-{ name: 'otp', type: 'pin', digits: 6 }
+{ name: 'otp', type: 'pin', digits: 6, autoSubmit: true }   // submits when the 6th digit lands
 { name: 'wallet_pin', type: 'pin', digits: 4, secret: true }
 
 <!-- standalone -->
@@ -41,7 +41,7 @@ Pattern tokens: `#` digit, `A` letter, `N`/`*` alphanumeric; any other character
 <PinInput v-model="pin" :length="4" secret />
 ```
 
-Props: `length` (default 4), `secret` (mask as dots), `isInvalid`, `disabled`. Emits `update:modelValue`, `complete(value)` when all boxes are filled, and `clearValidationErrors`.
+Props: `length` (default 4), `secret` (mask as dots), `autocomplete` (default `one-time-code`, or `off` when `secret`), `isInvalid`, `disabled`. Emits `update:modelValue`, `complete(value)` when all boxes are filled, and `clearValidationErrors`.
 
 ## Other inputs
 

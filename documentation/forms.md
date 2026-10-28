@@ -69,7 +69,7 @@ A field is a string (`'email'` → `{ name: 'email' }`) or an object:
 | `min` `max` `step` | number | |
 | `min` `max` `withTime` | date | ISO bounds; `withTime` renders `datetime-local` |
 | `countryCode` `detectCountry` | phone | default country `'KE'`; `detectCountry` opts in to a remote lookup |
-| `digits` (alias `length`) `secret` | pin | box count (default 4); `secret` masks digits as dots |
+| `digits` (alias `length`) `secret` `autoSubmit` | pin | box count (default 4); `secret` masks digits as dots; `autoSubmit` submits the form once every box is filled (typed, pasted or autofilled) |
 | `accept` | file | e.g. `'image/*'` |
 | `mask` | text-like | string, object or function, see [Inputs & masks](inputs.md#input-masks) |
 

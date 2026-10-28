@@ -137,6 +137,8 @@ const inputProps = (field) => ({
     ...(field.type === 'date' ? { withTime: field.withTime, min: field.min, max: field.max } : {}),
     ...(field.type === 'phone' ? { countryCode: field.countryCode, detectCountry: field.detectCountry } : {}),
     ...(field.type === 'pin' ? { length: field.length ?? field.digits, secret: field.secret } : {}),
+    // autoSubmit: send the form as soon as the last digit is in (typed, pasted or autofilled)
+    ...(field.type === 'pin' && field.autoSubmit ? { onComplete: () => submitForm() } : {}),
     ...(field.type === 'file' ? { accept: field.accept, multiple: field.multiple } : {}),
     ...(field.mask && field.type !== 'pin' ? { mask: field.mask } : {}),
     ...(field.props ?? {})

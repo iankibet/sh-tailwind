@@ -32,10 +32,10 @@ export const defaultTheme = {
         passwordWrapper: 'relative',
         passwordToggle: 'absolute inset-y-0 right-2 flex items-center text-gray-400 hover:text-gray-600',
         pin: {
-            wrapper: 'flex items-center gap-2',
-            box: 'size-11 rounded-md border border-gray-300 bg-white text-center text-lg font-semibold text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:cursor-not-allowed disabled:opacity-50',
-            boxFilled: 'size-11 rounded-md border border-blue-400 bg-blue-50 text-center text-lg font-semibold text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30',
-            boxInvalid: 'size-11 rounded-md border border-red-500 bg-white text-center text-lg font-semibold text-gray-900 shadow-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30'
+            wrapper: 'flex w-full items-center justify-between gap-2',
+            box: 'h-14 w-full min-w-0 max-w-14 flex-1 rounded-lg border border-gray-300 bg-white text-center text-xl font-semibold text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:cursor-not-allowed disabled:opacity-50',
+            boxFilled: 'h-14 w-full min-w-0 max-w-14 flex-1 rounded-lg border border-blue-400 bg-blue-50 text-center text-xl font-semibold text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30',
+            boxInvalid: 'h-14 w-full min-w-0 max-w-14 flex-1 rounded-lg border border-red-500 bg-white text-center text-xl font-semibold text-gray-900 shadow-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30'
         },
         suggest: {
             wrapper: 'relative',

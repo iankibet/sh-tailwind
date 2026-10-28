@@ -13,7 +13,8 @@ const props = defineProps({
     isInvalid: Boolean,
     disabled: Boolean,
     id: String,
-    autocomplete: { type: String, default: 'one-time-code' }
+    // defaults to 'one-time-code' for codes and 'off' for secret PINs
+    autocomplete: String
 })
 const emit = defineEmits(['update:modelValue', 'clearValidationErrors', 'complete'])
 
@@ -21,6 +22,17 @@ const t = useTheme('inputs')
 const count = computed(() => Math.max(1, parseInt(props.length) || 4))
 const boxes = ref([]) // input element refs
 const digits = ref([])
+
+// Only the first box asks for one-time-code autofill, so iOS/Android offer the
+// code once and fill from the start.
+const autocompleteFor = (index) => {
+    if (index > 0) return 'off'
+    return props.autocomplete ?? (props.secret ? 'off' : 'one-time-code')
+}
+
+// Secret digits show as a bullet instead of using type="password", which would
+// pull in password managers and "save password" prompts.
+const shown = (digit) => (props.secret && digit ? '●' : digit)
 
 const seed = (value) => {
     const chars = String(value ?? '').replace(/\D/g, '').slice(0, count.value).split('')
@@ -52,24 +64,40 @@ const focusBox = (index) => {
     })
 }
 
-const onInput = (index, event) => {
-    emit('clearValidationErrors')
-    const raw = event.target.value.replace(/\D/g, '')
-    if (!raw) {
-        digits.value[index] = ''
-        emitValue()
-        return
-    }
-    // take the last typed digit; advance through remaining boxes if pasted
-    const chars = raw.split('')
-    let i = index
+// Spread digits from `start`; a whole code always fills from the first box.
+const fill = (start, chars) => {
+    let i = chars.length >= count.value ? 0 : start
     for (const char of chars) {
         if (i >= count.value) break
         digits.value[i] = char
         i++
     }
     emitValue()
-    focusBox(Math.min(i, count.value - 1))
+    if (i >= count.value) {
+        boxes.value[count.value - 1]?.blur()
+    } else {
+        focusBox(i)
+    }
+}
+
+const onInput = (index, event) => {
+    emit('clearValidationErrors')
+    const raw = event.target.value.replace(/\D/g, '')
+    // a single keystroke: keep just the typed digit (the box may already hold one)
+    if (event.inputType === 'insertText' && /^\d$/.test(event.data ?? '')) {
+        event.target.value = shown(event.data)
+        fill(index, [event.data])
+        return
+    }
+    if (!raw) {
+        digits.value[index] = ''
+        event.target.value = ''
+        emitValue()
+        return
+    }
+    // keyboard paste, autofill from messages/email, or replacement text
+    fill(index, raw.split(''))
+    event.target.value = shown(digits.value[index])
 }
 
 const onKeydown = (index, event) => {
@@ -89,12 +117,12 @@ const onKeydown = (index, event) => {
     }
 }
 
-const onPaste = (event) => {
+const onPaste = (index, event) => {
     event.preventDefault()
-    const text = (event.clipboardData?.getData('text') ?? '').replace(/\D/g, '').slice(0, count.value)
-    seed(text)
-    emitValue()
-    focusBox(Math.min(text.length, count.value - 1))
+    const chars = (event.clipboardData?.getData('text') ?? '').replace(/\D/g, '').split('')
+    if (!chars.length) return
+    emit('clearValidationErrors')
+    fill(index, chars)
 }
 
 const boxClass = (index) => {
@@ -112,16 +140,19 @@ const boxClass = (index) => {
             :key="index"
             :ref="el => (boxes[index] = el)"
             :id="index === 0 ? id : undefined"
-            :value="digit"
-            :type="secret ? 'password' : 'text'"
+            :value="shown(digit)"
+            type="text"
             inputmode="numeric"
-            :autocomplete="autocomplete"
-            maxlength="1"
+            pattern="[0-9]*"
+            :autocomplete="autocompleteFor(index)"
+            autocorrect="off"
+            spellcheck="false"
+            :aria-label="`Digit ${index + 1} of ${count}`"
             :disabled="disabled"
             :class="boxClass(index)"
             @input="onInput(index, $event)"
             @keydown="onKeydown(index, $event)"
-            @paste="onPaste"
+            @paste="onPaste(index, $event)"
             @focus="$event.target.select(); emit('clearValidationErrors')"
         >
     </div>
