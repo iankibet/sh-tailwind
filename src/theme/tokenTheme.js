@@ -35,10 +35,10 @@ export const tokenTheme = {
         passwordWrapper: 'relative',
         passwordToggle: 'absolute inset-y-0 right-2 flex items-center text-fg-subtle hover:text-fg',
         pin: {
-            wrapper: 'flex w-full items-center justify-between gap-2',
-            box: 'h-14 w-full min-w-0 max-w-14 flex-1 rounded-lg border border-line-strong bg-surface text-center text-xl font-semibold text-fg shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50',
-            boxFilled: 'h-14 w-full min-w-0 max-w-14 flex-1 rounded-lg border border-primary/60 bg-primary-soft text-center text-xl font-semibold text-fg shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30',
-            boxInvalid: 'h-14 w-full min-w-0 max-w-14 flex-1 rounded-lg border border-red-500 bg-surface text-center text-xl font-semibold text-fg shadow-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30'
+            wrapper: 'grid w-full grid-flow-col auto-cols-fr gap-2 sm:gap-3',
+            box: 'h-14 w-full min-w-0 rounded-lg border border-line-strong bg-surface text-center text-xl font-semibold text-fg shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50',
+            boxFilled: 'h-14 w-full min-w-0 rounded-lg border border-primary/60 bg-primary-soft text-center text-xl font-semibold text-fg shadow-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30',
+            boxInvalid: 'h-14 w-full min-w-0 rounded-lg border border-red-500 bg-surface text-center text-xl font-semibold text-fg shadow-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30'
         },
         suggest: {
             wrapper: 'relative',
