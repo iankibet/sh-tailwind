@@ -143,7 +143,7 @@ const boxClass = (index) => {
             :value="shown(digit)"
             type="text"
             inputmode="numeric"
-            pattern="[0-9]*"
+            :pattern="secret ? '●?' : '[0-9]*'"
             :autocomplete="autocompleteFor(index)"
             autocorrect="off"
             spellcheck="false"
