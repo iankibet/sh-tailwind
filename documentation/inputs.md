@@ -18,6 +18,8 @@ Set `mask` on a field (or use `MaskedInput` directly) to auto-format as the user
 | `{ pattern: '#### ####', unmask: true }` | `1234 5678` | `12345678` (stripped) |
 | `(value) => value.toUpperCase()` | `ABC` | `ABC` |
 
+Whole-number masks (`'integer'`, `'number'`, `{ integer: true }`, `decimals: 0`) open the digits-only keypad on phones. If someone types a dot anyway, it stays on screen and the digits after it are refused, so `200.23` becomes `200`, never `20,023`. The dot is tidied away when the field loses focus.
+
 Pattern tokens: `#` digit, `A` letter, `N`/`*` alphanumeric; any other character is a literal. Money masks emit the **raw number** (clean for the backend); pattern masks emit the formatted string unless `unmask: true`.
 
 ```vue

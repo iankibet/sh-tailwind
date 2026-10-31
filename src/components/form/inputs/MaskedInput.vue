@@ -15,14 +15,21 @@ const emit = defineEmits(['update:modelValue', 'clearValidationErrors'])
 
 const display = ref('')
 
-const sync = (value) => {
+const sync = (value, force = false) => {
+    // Leave what the user typed alone when it already means this value, e.g.
+    // "200." in a whole-number field is 200; reformatting would drop the dot.
+    if (!force && applyMask(display.value, props.mask).model === String(value ?? '')) {
+        return
+    }
     const { display: formatted } = applyMask(value, props.mask)
     if (formatted !== display.value) {
         display.value = formatted
     }
 }
-watch(() => props.modelValue, sync, { immediate: true })
-watch(() => props.mask, () => sync(props.modelValue))
+watch(() => props.modelValue, (value) => sync(value), { immediate: true })
+watch(() => props.mask, () => sync(props.modelValue, true))
+// tidy up on leaving the field ("200." → "200")
+const onBlur = () => sync(props.modelValue, true)
 
 const onInput = (event) => {
     emit('clearValidationErrors')
@@ -57,5 +64,6 @@ const onInput = (event) => {
         :disabled="disabled"
         @input="onInput"
         @focus="emit('clearValidationErrors')"
+        @blur="onBlur"
     >
 </template>

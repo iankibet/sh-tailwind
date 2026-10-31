@@ -46,23 +46,25 @@ export function maskPattern (raw, pattern, { unmask = false } = {}) {
 }
 
 export function maskMoney (raw, { decimals = 2, prefix = '', suffix = '', integer = false } = {}) {
+    // `integer: true` and `decimals: 0` both mean whole numbers.
+    const whole = integer || decimals <= 0
     let s = String(raw ?? '').replace(/[^0-9.]/g, '')
     const dot = s.indexOf('.')
     if (dot !== -1) {
         s = s.slice(0, dot + 1) + s.slice(dot + 1).replace(/\./g, '')
     }
-    if (integer) {
-        // drop the decimal part rather than merging the digits
-        s = s.split('.')[0]
-    }
     let [int = '', dec] = s.split('.')
     int = int.replace(/^0+(?=\d)/, '')
     const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    const hasDot = s.includes('.') && !integer
+    const hasDot = s.includes('.')
 
     let display = grouped
     let model = int
-    if (hasDot) {
+    if (hasDot && whole) {
+        // Keep a typed dot on screen and refuse the digits after it. Dropping
+        // the dot would join them on: typing 200.23 would give 20,023.
+        display = (grouped || '0') + '.'
+    } else if (hasDot) {
         dec = (dec ?? '').slice(0, decimals)
         display = (grouped || '0') + '.' + dec
         model = (int || '0') + '.' + dec
@@ -90,8 +92,20 @@ export function applyMask (value, mask) {
     return maskPattern(value, String(mask))
 }
 
+// Whole-number masks: 'integer', 'number', { integer: true }, { decimals: 0 }
+export function isWholeNumberMask (mask) {
+    if (mask === 'integer' || mask === 'number') {
+        return true
+    }
+    return !!mask && typeof mask === 'object' && !mask.pattern && (mask.integer === true || mask.decimals === 0)
+}
+
 // inputmode hint for the on-screen keyboard
 export function maskInputMode (mask) {
+    // digits-only keypad, so phones show no dot key
+    if (isWholeNumberMask(mask)) {
+        return 'numeric'
+    }
     if (isNamedNumericMask(mask) || (mask && typeof mask === 'object' && !mask.pattern)) {
         return 'decimal'
     }
